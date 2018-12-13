@@ -1,0 +1,33 @@
+/*
+
+ */
+ 
+ .button-default {
+    -fx-font-size: 14;
+    -fx-text-fill: white;
+    -fx-background-color:   #902e2e
+}
+ 
+.tab-pane {	
+    -fx-tab-max-height: 0 ;	
+} 	
+.tab-pane .tab-header-area {	
+    visibility: hidden ;	
+}
+ 
+.admin-menu-icon{
+   -fx-background-repeat: no-repeat;
+  -fx-background-position: left;
+  -fx-background-size: 28px;
+  -fx-background-position: 12px;
+ 
+}
+
+.dashboard-menu-button-padding{
+     -fx-padding:0 0 0 50px;
+}
+.admin-button-personnel{
+  -fx-background-image: url('../../Views/employee-50.png');
+}
+
+

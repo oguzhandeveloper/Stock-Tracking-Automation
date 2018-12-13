@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AdminScreenController">
+   <children>
+      <BorderPane prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <TabPane fx:id="tabPanePersonnel" prefHeight="550.0" prefWidth="579.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab fx:id="tabPersonnel" text="personeller">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <JFXTabPane layoutX="140.0" layoutY="153.0" />
+                              <JFXTextField editable="false" labelFloat="true" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="ID" />
+                              <JFXTextField labelFloat="true" layoutX="190.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="İsim" />
+                              <JFXTextField labelFloat="true" layoutX="370.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Soyisim" />
+                              <JFXTextField labelFloat="true" layoutX="10.0" layoutY="100.0" prefHeight="30.0" prefWidth="150.0" promptText="İşi" />
+                              <JFXTextField labelFloat="true" layoutX="190.0" layoutY="100.0" prefHeight="30.0" prefWidth="150.0" promptText="Bölümü" />
+                              <JFXToggleButton layoutX="370.0" layoutY="86.0" text="Çalışıyor Mu?" />
+                              <JFXButton layoutX="550.0" layoutY="100.0" prefHeight="30.0" prefWidth="100.0" text="Personeli Çıkar" />
+                              <JFXButton layoutX="680.0" layoutY="25.0" prefHeight="30.0" prefWidth="100.0" text="Zimmet Çıkar" />
+                              <JFXButton layoutX="680.0" layoutY="100.0" prefHeight="30.0" prefWidth="100.0" text="Personel Rapor" />
+                              <JFXButton layoutX="580.0" layoutY="485.0" prefHeight="30.0" prefWidth="200.0" text="Tüm Çalışanları Raporla" />
+                              <JFXTreeTableView layoutX="10.0" layoutY="153.0" prefHeight="320.0" prefWidth="770.0" />
+                              <JFXButton layoutX="550.0" layoutY="25.0" prefHeight="30.0" prefWidth="100.0" text="Zimmet Ekle" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="tabStock" text="stok">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab fx:id="tabWasteStorage" text="Atık Deposu">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabAssignResponsibility" text="Zimmetleme">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabReport" text="Rapor Sayfası">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabRemoveResponsibility" text="Zimmet Çıkar">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabresponsibilities" text="Zimmetler">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+         <top>
+            <Pane prefHeight="50.0" prefWidth="885.0" scaleShape="false" BorderPane.alignment="CENTER" />
+         </top>
+         <left>
+            <VBox prefHeight="550.0" prefWidth="200.0" style="-fx-background-color: #891c1c;" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXButton fx:id="buttonPersonnel" onAction="#buttonPersonnel_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Personeller" textFill="#bbaaaa">
+                     <styleClass>
+                        <String fx:value="dashboard-menu-button-padding" />
+                        <String fx:value="admin-menu-icon" />
+                        <String fx:value="admin-button-personnel" />
+                     </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="buttonStock" onAction="#buttonStock_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Stok" textFill="#bbaaaa">
+                     <styleClass>
+                        <String fx:value="dashboard-menu-button-padding" />
+                        <String fx:value="admin-menu-icon" />
+                        <String fx:value="admin-button-personnel" />
+                     </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="buttonWasteStorage" onAction="#buttonWasteStorage_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Atık Deposu" textFill="#bbaaaa">
+                     <styleClass>
+                        <String fx:value="dashboard-menu-button-padding" />
+                        <String fx:value="admin-menu-icon" />
+                        <String fx:value="admin-button-personnel" />
+                     </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="buttonResponsibilities" onAction="#buttonResponsibilities_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Zimmetli Ürünler" textFill="#bbaaaa">
+                     <styleClass>
+                        <String fx:value="dashboard-menu-button-padding" />
+                        <String fx:value="admin-menu-icon" />
+                        <String fx:value="admin-button-personnel" />
+                     </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </VBox>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>
