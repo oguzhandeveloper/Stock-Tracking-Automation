@@ -44,11 +44,11 @@ public class SignInController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        if(DBHelper.personnelCurrent == null)
+        if(AccessFXML.personnelCurrent == null)
             return;
-        if (DBHelper.personnelCurrent.username != null && DBHelper.personnelCurrent.password != null) {
-            textUsernameField.setText(DBHelper.personnelCurrent.username);
-            textPasswordField.setText(DBHelper.personnelCurrent.password);
+        if (AccessFXML.personnelCurrent.username != null && AccessFXML.personnelCurrent.password != null) {
+            textUsernameField.setText(AccessFXML.personnelCurrent.username);
+            textPasswordField.setText(AccessFXML.personnelCurrent.password);
         }
     }
 
@@ -66,7 +66,7 @@ public class SignInController implements Initializable {
             accessFXML._modal("Error", "Username or Password Could Not Empty", "OKEY", signInAnchorPane);
             return;
         }
-
+        
         DBHelper dp = new DBHelper();
         dp.Open();
         Personnel p = dp.getPersonnel(username, password);
@@ -76,6 +76,10 @@ public class SignInController implements Initializable {
             accessFXML._modal("Error", "Username or Password is Wrong", "OKEY", signInAnchorPane);
             return;
         }
+        
+        accessFXML.personnelCurrent = p;
+        if (p.Job.equals("Admin"))
+            accessFXML.show("AdminScreen.fxml", "Admin Panel", signInAnchorPane);
 
     }
 

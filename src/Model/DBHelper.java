@@ -33,8 +33,6 @@ public class DBHelper {
 
     public static ArrayList<Job> Jobs;
     public static ArrayList<Department> Departments;
-    
-    public static Personnel personnelCurrent;
 
     public DBHelper() {
         try {
@@ -80,6 +78,49 @@ public class DBHelper {
         return null;
     }
 
+    public void Update(Personnel p) {
+        String username = p.username;
+        String password = p.password;
+        String name = p.name;
+        String lastName = p.lastName;
+        String job = p.Job;
+        String department = p.Department;
+        int Active = p.Active;
+
+        int departmentID = 0;
+        int jobID = 0;
+
+        for (Department d : DBHelper.Departments) {
+            if (department.equals(d.name)) {
+                departmentID = d.deparmentID;
+            }
+        }
+        for (Job j : DBHelper.Jobs) {
+            if (job.equals(j.name)) {
+                jobID = j.jobID;
+            }
+        }
+
+        try {
+            /*
+            UPDATE table_name
+            SET column1 = value1, column2 = value2, ...
+            WHERE condition;
+             */
+            String sql;
+            sql = "UPDATE personnel "
+                    + "SET name = '"+name+"', lastname ='"+lastName+"', jobID ="+jobID+","
+                    + " departmentID ="+departmentID+", active ="+Active
+                    + " WHERE personnelID = "+p.ID;
+            stmt.executeUpdate(sql); // DML
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return;
+        }
+
+    }
+
     public void Insert(Personnel p) {
         String username = p.username;
         String password = p.password;
@@ -105,10 +146,10 @@ public class DBHelper {
 
         try {
             String sql;
-            sql = "INSERT INTO personnel(username,password,name,lastname,jobID,departmentID,active) VALUES('"+
-                    username+"','"+password+"','"+name+"','"+lastName+"',"+jobID+","+departmentID+","+Active+")";  
+            sql = "INSERT INTO personnel(username,password,name,lastname,jobID,departmentID,active) VALUES('"
+                    + username + "','" + password + "','" + name + "','" + lastName + "'," + jobID + "," + departmentID + "," + Active + ")";
             stmt.executeUpdate(sql); // DML
-            
+
         } catch (SQLException e) {
             System.out.println(e);
             return;

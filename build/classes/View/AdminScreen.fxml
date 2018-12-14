@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AdminScreenController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneAdmin" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AdminScreenController">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -25,18 +25,18 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <JFXTabPane layoutX="140.0" layoutY="153.0" />
-                              <JFXTextField editable="false" labelFloat="true" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="ID" />
-                              <JFXTextField labelFloat="true" layoutX="190.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="İsim" />
-                              <JFXTextField labelFloat="true" layoutX="370.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Soyisim" />
-                              <JFXTextField labelFloat="true" layoutX="10.0" layoutY="100.0" prefHeight="30.0" prefWidth="150.0" promptText="İşi" />
-                              <JFXTextField labelFloat="true" layoutX="190.0" layoutY="100.0" prefHeight="30.0" prefWidth="150.0" promptText="Bölümü" />
-                              <JFXToggleButton layoutX="370.0" layoutY="86.0" text="Çalışıyor Mu?" />
-                              <JFXButton layoutX="550.0" layoutY="100.0" prefHeight="30.0" prefWidth="100.0" text="Personeli Çıkar" />
-                              <JFXButton layoutX="680.0" layoutY="25.0" prefHeight="30.0" prefWidth="100.0" text="Zimmet Çıkar" />
-                              <JFXButton layoutX="680.0" layoutY="100.0" prefHeight="30.0" prefWidth="100.0" text="Personel Rapor" />
+                              <JFXTextField fx:id="textFieldPersonnelID" editable="false" labelFloat="true" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="ID" />
+                              <JFXTextField fx:id="textFieldName" labelFloat="true" layoutX="190.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="İsim" />
+                              <JFXTextField fx:id="textFieldLastName" labelFloat="true" layoutX="370.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Soyisim" />
+                              <JFXTextField fx:id="textFieldJob" labelFloat="true" layoutX="10.0" layoutY="100.0" prefHeight="30.0" prefWidth="150.0" promptText="İşi" />
+                              <JFXTextField fx:id="textFieldDepartment" labelFloat="true" layoutX="190.0" layoutY="100.0" prefHeight="30.0" prefWidth="150.0" promptText="Bölümü" />
+                              <JFXToggleButton fx:id="toggleButtonActive" layoutX="370.0" layoutY="86.0" text="Çalışıyor Mu?" />
+                              <JFXButton fx:id="buttonUpdatePersonnel" layoutX="550.0" layoutY="100.0" onAction="#buttonUpdatePersonnel_Click" prefHeight="30.0" prefWidth="100.0" text="Güncelle" />
+                              <JFXButton fx:id="buttonResponsibilityRemove" layoutX="680.0" layoutY="25.0" onAction="#buttonResponsibilityRemove_Click" prefHeight="30.0" prefWidth="100.0" text="Zimmet Çıkar" />
+                              <JFXButton fx:id="buttonPersonnelReport" layoutX="680.0" layoutY="100.0" onAction="#buttonPersonnelReport_Click" prefHeight="30.0" prefWidth="100.0" text="Personel Rapor" />
                               <JFXButton layoutX="580.0" layoutY="485.0" prefHeight="30.0" prefWidth="200.0" text="Tüm Çalışanları Raporla" />
-                              <JFXTreeTableView layoutX="10.0" layoutY="153.0" prefHeight="320.0" prefWidth="770.0" />
-                              <JFXButton layoutX="550.0" layoutY="25.0" prefHeight="30.0" prefWidth="100.0" text="Zimmet Ekle" />
+                              <JFXTreeTableView fx:id="treeTableViewPersonnels" layoutX="10.0" layoutY="153.0" onMouseClicked="#treeTableViewPersonnels_Click" prefHeight="320.0" prefWidth="770.0" />
+                              <JFXButton fx:id="buttonResponsibilityAdd" layoutX="550.0" layoutY="25.0" onAction="#buttonResponsibilityAdd_Click" prefHeight="30.0" prefWidth="100.0" text="Zimmet Ekle" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -78,7 +78,7 @@
             <Pane prefHeight="50.0" prefWidth="885.0" scaleShape="false" BorderPane.alignment="CENTER" />
          </top>
          <left>
-            <VBox prefHeight="550.0" prefWidth="200.0" style="-fx-background-color: #891c1c;" BorderPane.alignment="CENTER">
+            <VBox prefHeight="550.0" prefWidth="200.0" style="-fx-background-color: #862d2d;" BorderPane.alignment="CENTER">
                <children>
                   <JFXButton fx:id="buttonPersonnel" onAction="#buttonPersonnel_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Personeller" textFill="#bbaaaa">
                      <styleClass>
@@ -110,7 +110,7 @@
                         <Font size="18.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="buttonResponsibilities" onAction="#buttonResponsibilities_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Zimmetli Ürünler" textFill="#bbaaaa">
+                  <JFXButton fx:id="buttonResponsibilities" onAction="#buttonResponsibilities_Click" prefHeight="50.0" prefWidth="200.0" ripplerFill="BLACK" stylesheets="@../Views/style.css" text="Zimmetler" textFill="#bbaaaa">
                      <styleClass>
                         <String fx:value="dashboard-menu-button-padding" />
                         <String fx:value="admin-menu-icon" />

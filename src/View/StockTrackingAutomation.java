@@ -20,14 +20,16 @@ import javafx.stage.Stage;
  */
 public class StockTrackingAutomation extends Application {
 
+    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
+        String fxmlName = "AdminScreen.fxml";
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlName));
 
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
-        stage.setTitle("Sign In");
+        stage.setTitle("Admin Screen");
         stage.setResizable(false);
         stage.show();
     }

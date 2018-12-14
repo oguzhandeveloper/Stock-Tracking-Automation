@@ -5,6 +5,9 @@
  */
 package View;
 
+import Model.*;
+import Controller.*;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -23,6 +26,8 @@ import javafx.stage.Stage;
  * @author OGUZHAN
  */
 public class AccessFXML {
+    
+    public static Personnel personnelCurrent;
 
     public void show(String url,String title, AnchorPane ap) {
         try {

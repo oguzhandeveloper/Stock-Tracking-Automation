@@ -82,7 +82,7 @@ public class SignUpController implements Initializable {
     @FXML
     private void buttonSignIn_Click(ActionEvent event) {
         accessFXML.show("SignIn.fxml", "Sign In", signUpAnchorPane);
-        DBHelper.personnelCurrent = null;
+        AccessFXML.personnelCurrent = null;
     }
 
     @FXML
@@ -130,7 +130,7 @@ public class SignUpController implements Initializable {
         
         db.Insert(p1);
         db.Close();
-        DBHelper.personnelCurrent = p1;
+        AccessFXML.personnelCurrent = p1;
         accessFXML.show("SignIn.fxml", "Sign In", signUpAnchorPane);
     }
 
