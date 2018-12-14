@@ -37,43 +37,46 @@ public class SignInController implements Initializable {
     private JFXButton buttonSignIn;
     @FXML
     private JFXButton buttonSignUp;
-    
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+        if(DBHelper.personnelCurrent == null)
+            return;
+        if (DBHelper.personnelCurrent.username != null && DBHelper.personnelCurrent.password != null) {
+            textUsernameField.setText(DBHelper.personnelCurrent.username);
+            textPasswordField.setText(DBHelper.personnelCurrent.password);
+        }
+    }
 
     @FXML
     private void buttonSignUp_Click(ActionEvent event) {
-        accessFXML.show("SignUp.fxml","Sign Up", signInAnchorPane);
+        accessFXML.show("SignUp.fxml", "Sign Up", signInAnchorPane);
     }
 
     @FXML
     private void buttonSignIn_Click(ActionEvent event) {
-       String username = textUsernameField.getText();
-       String password = textPasswordField.getText();
-       
-       if(username.equals("") || password.equals("")){
-           accessFXML._modal("Error", "Username or Password Could Not Empty","OKEY" , signInAnchorPane);
-           return;
-       }
-       
-       
-       
-       DBHelper dp = new DBHelper();
-       dp.Open();
-       Personnel p = dp.getPersonnel(username, password);
-       dp.Close();
-       
-       if(p == null){
-           accessFXML._modal("Error", "Username or Password is Wrong","OKEY" , signInAnchorPane);
-           return;
-       }
-       
+        String username = textUsernameField.getText();
+        String password = textPasswordField.getText();
+
+        if (username.equals("") || password.equals("")) {
+            accessFXML._modal("Error", "Username or Password Could Not Empty", "OKEY", signInAnchorPane);
+            return;
+        }
+
+        DBHelper dp = new DBHelper();
+        dp.Open();
+        Personnel p = dp.getPersonnel(username, password);
+        dp.Close();
+
+        if (p == null) {
+            accessFXML._modal("Error", "Username or Password is Wrong", "OKEY", signInAnchorPane);
+            return;
+        }
+
     }
-    
+
 }

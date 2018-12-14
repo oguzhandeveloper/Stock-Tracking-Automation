@@ -30,9 +30,11 @@ public class DBHelper {
 
     private Connection conn = null;
     private Statement stmt = null;
-    
+
     public static ArrayList<Job> Jobs;
     public static ArrayList<Department> Departments;
+    
+    public static Personnel personnelCurrent;
 
     public DBHelper() {
         try {
@@ -48,10 +50,10 @@ public class DBHelper {
             conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
             //System.out.println("Creating statement...");
             stmt = conn.createStatement();
-            
+
             DBHelper.Jobs = this.getJobs();
             DBHelper.Departments = this.getDepartments();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(DBHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,17 +71,66 @@ public class DBHelper {
     public Personnel getPersonnel(String username, String password) {
 
         ArrayList<Personnel> personnels = this.getPersonnels();
-        
-        for(Personnel p: personnels){
-            if(username.equals(p.username) && password.equals(p.password))
+
+        for (Personnel p : personnels) {
+            if (username.equals(p.username) && password.equals(p.password)) {
                 return p;
+            }
         }
-        return null;  
+        return null;
     }
-    
-    public ArrayList<Department> getDepartments(){
-        ArrayList<Department> departments= new ArrayList<Department>();
-        
+
+    public void Insert(Personnel p) {
+        String username = p.username;
+        String password = p.password;
+        String name = p.name;
+        String lastName = p.lastName;
+        String job = p.Job;
+        String department = p.Department;
+        int Active = p.Active;
+
+        int departmentID = 0;
+        int jobID = 0;
+
+        for (Department d : DBHelper.Departments) {
+            if (department.equals(d.name)) {
+                departmentID = d.deparmentID;
+            }
+        }
+        for (Job j : DBHelper.Jobs) {
+            if (job.equals(j.name)) {
+                jobID = j.jobID;
+            }
+        }
+
+        try {
+            String sql;
+            sql = "INSERT INTO personnel(username,password,name,lastname,jobID,departmentID,active) VALUES('"+
+                    username+"','"+password+"','"+name+"','"+lastName+"',"+jobID+","+departmentID+","+Active+")";  
+            stmt.executeUpdate(sql); // DML
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+            return;
+        }
+
+    }
+
+    public Personnel PersonnelCheck(String username) {
+
+        ArrayList<Personnel> personnels = this.getPersonnels();
+
+        for (Personnel p : personnels) {
+            if (username.equals(p.username)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        ArrayList<Department> departments = new ArrayList<Department>();
+
         try {
             String sql;
             sql = "SELECT * FROM department";
@@ -97,14 +148,14 @@ public class DBHelper {
             rs.close();
         } catch (SQLException ex) {
             return null;
-        } 
-     
+        }
+
         return departments;
     }
-    
-    public ArrayList<Job> getJobs(){
-        ArrayList<Job> jobs= new ArrayList<Job>();
-        
+
+    public ArrayList<Job> getJobs() {
+        ArrayList<Job> jobs = new ArrayList<Job>();
+
         try {
             String sql;
             sql = "SELECT * FROM job";
@@ -122,13 +173,13 @@ public class DBHelper {
             rs.close();
         } catch (SQLException ex) {
             return null;
-        } 
-     
+        }
+
         return jobs;
     }
-    
-    public ArrayList<Personnel> getPersonnels(){
-        ArrayList<Personnel> personnels= new ArrayList<Personnel>();
+
+    public ArrayList<Personnel> getPersonnels() {
+        ArrayList<Personnel> personnels = new ArrayList<Personnel>();
         try {
             String sql;
             sql = "SELECT * FROM personnel";
@@ -143,17 +194,19 @@ public class DBHelper {
                 p.password = rs.getString("password");
                 p.name = rs.getString("name");
                 p.lastName = rs.getString("lastname");
-                p.Active =rs.getInt("active");
+                p.Active = rs.getInt("active");
                 int jobID = rs.getInt("jobID");
                 int departmentID = rs.getInt("departmentID");
-                
-                for(Department d: DBHelper.Departments){
-                    if(departmentID == d.deparmentID)
+
+                for (Department d : DBHelper.Departments) {
+                    if (departmentID == d.deparmentID) {
                         p.Department = d.name;
+                    }
                 }
-                for(Job j : DBHelper.Jobs){
-                    if(jobID == j.jobID)
+                for (Job j : DBHelper.Jobs) {
+                    if (jobID == j.jobID) {
                         p.Job = j.name;
+                    }
                 }
                 personnels.add(p);
 
@@ -162,7 +215,7 @@ public class DBHelper {
             rs.close();
         } catch (SQLException ex) {
             return null;
-        } 
+        }
         return personnels;
     }
 
