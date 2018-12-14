@@ -89,87 +89,37 @@ public class AdminScreenController implements Initializable {
     private JFXButton buttonWasteStorage;
     @FXML
     private JFXButton buttonResponsibilities;
+    @FXML
+    private JFXTreeTableView<ProductTreeTable> treeTableViewStock;
+    @FXML
+    private JFXButton buttonWasteStorageStock;
+    @FXML
+    private JFXButton buttonResponsibilityStock;
+    @FXML
+    private JFXButton buttomComputerStock;
+    @FXML
+    private JFXButton buttonHardwareStock;
+    
+    ///TreeViews TreeTableView içerisine eklenecek olanları ayarlar
+    TreeTableViewer treeTableViewer = new TreeTableViewer();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         viewPersonnels();
     }
-
-    public void viewPersonnels() {
-        //TreeViewTable içerisine eklenecek olan değişkenlerin columnları belirleniyor.
-        JFXTreeTableColumn<PersonnelTreeTable, String> personnelIDColumn = new JFXTreeTableColumn<>("ID");
-        personnelIDColumn.setPrefWidth(50);
-        personnelIDColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String> param) {
-                return param.getValue().getValue().ID;
-            }
-        });
-        JFXTreeTableColumn<PersonnelTreeTable, String> personnelNameColumn = new JFXTreeTableColumn<>("Name");
-        personnelNameColumn.setPrefWidth(150);
-        personnelNameColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String> param) {
-                return param.getValue().getValue().name;
-            }
-        });
-        JFXTreeTableColumn<PersonnelTreeTable, String> personnelLastNameColumn = new JFXTreeTableColumn<>("Last Name");
-        personnelLastNameColumn.setPrefWidth(150);
-        personnelLastNameColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String> param) {
-                return param.getValue().getValue().lastName;
-            }
-        });
-        
-        JFXTreeTableColumn<PersonnelTreeTable, String> personnelJobColumn = new JFXTreeTableColumn<>("Job");
-        personnelJobColumn.setPrefWidth(150);
-        personnelJobColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String> param) {
-                return param.getValue().getValue().Job;
-            }
-        });
-        JFXTreeTableColumn<PersonnelTreeTable, String> personnelDepartmentColumn = new JFXTreeTableColumn<>("Department");
-        personnelDepartmentColumn.setPrefWidth(150);
-        personnelDepartmentColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String> param) {
-                return param.getValue().getValue().Department;
-            }
-        });
-        JFXTreeTableColumn<PersonnelTreeTable, String> personnelActiveColumn = new JFXTreeTableColumn<>("Active");
-        personnelActiveColumn.setPrefWidth(70);
-        personnelActiveColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<PersonnelTreeTable, String> param) {
-                return param.getValue().getValue().Active;
-            }
-        });
-        
-        //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
-        ObservableList<PersonnelTreeTable> personnelsTreeTables = FXCollections.observableArrayList();
-        
-        DBHelper db  = new DBHelper();
-        db.Open();
-        ArrayList<Personnel> personnels = db.getPersonnels();
-        db.Close();
-        
-        //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
-        for(Personnel p: personnels){
-            personnelsTreeTables.add(new PersonnelTreeTable(p.ID+"", p.name, p.lastName, p.Job, p.Department,p.Active+""));
-        }
-        
-        //içersindeki değerleri yazdırıken bağlı olması gereken root(yani değerleri neredem çekecek) değişkeni tanımlanıyor
-        //ve treeviewtable column'ları ayarlanıyor.
-        final TreeItem<PersonnelTreeTable> root = new RecursiveTreeItem<PersonnelTreeTable>(personnelsTreeTables, RecursiveTreeObject::getChildren);
-        treeTableViewPersonnels.getColumns().setAll(personnelIDColumn,personnelNameColumn,personnelLastNameColumn,
-                personnelJobColumn,personnelDepartmentColumn,personnelActiveColumn);
-        treeTableViewPersonnels.setRoot(root);
-        treeTableViewPersonnels.setShowRoot(false);
-        
-        
+    
+    public void viewPersonnels(){
+        treeTableViewer.viewPersonnels(treeTableViewPersonnels);
     }
+    
+    public void viewComputersInStock(){
+        treeTableViewer.viewProduct(treeTableViewStock, true,false);
+    }
+    public void viewHardwaresInStock(){
+        treeTableViewer.viewProduct(treeTableViewStock, false,false);
+    }
+    
+    
 
     @FXML
     private void buttonUpdatePersonnel_Click(ActionEvent event) {
@@ -178,8 +128,8 @@ public class AdminScreenController implements Initializable {
         int personnelID = Integer.parseInt(textFieldPersonnelID.getText());
         String job = textFieldJob.getText();
         String department = textFieldDepartment.getText();
-        int active = toggleButtonActive.isSelected()? 1: 0;
-        
+        int active = toggleButtonActive.isSelected() ? 1 : 0;
+
         Personnel person = new Personnel();
         person.ID = personnelID;
         person.name = name;
@@ -187,13 +137,33 @@ public class AdminScreenController implements Initializable {
         person.Job = job;
         person.Department = department;
         person.Active = active;
-        
-        DBHelper db  = new DBHelper();
+
+        DBHelper db = new DBHelper();
         db.Open();
         db.Update(person);
         db.Close();
         viewPersonnels();
-        
+
+    }
+
+    @FXML
+    void buttomComputerStock_Click(ActionEvent event) {
+        viewComputersInStock();
+    }
+
+    @FXML
+    void buttonHardwareStock_Click(ActionEvent event) {
+        viewHardwaresInStock();
+    }
+    
+     @FXML
+    void buttonResponsibilityStock_Click(ActionEvent event) {
+
+    }
+    
+      @FXML
+    void buttonWasteStorageStock_Click(ActionEvent event) {
+
     }
 
     @FXML
@@ -222,6 +192,7 @@ public class AdminScreenController implements Initializable {
     private void buttonStock_Click(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
         selectionModel.select(tabStock);
+        viewComputersInStock();
     }
 
     @FXML
@@ -234,19 +205,20 @@ public class AdminScreenController implements Initializable {
     private void buttonResponsibilities_Click(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
         selectionModel.select(tabresponsibilities);
+        
     }
 
     @FXML
     private void treeTableViewPersonnels_Click(MouseEvent event) {
         TreeItem<PersonnelTreeTable> item = treeTableViewPersonnels.getSelectionModel().getSelectedItem();
-        PersonnelTreeTable ptt= item.getValue();
+        PersonnelTreeTable ptt = item.getValue();
         textFieldPersonnelID.setText(ptt.ID.getValue());
         textFieldName.setText(ptt.name.getValue());
         textFieldLastName.setText(ptt.lastName.getValue());
         textFieldJob.setText(ptt.Job.getValue());
         textFieldDepartment.setText(ptt.Department.getValue());
         toggleButtonActive.setSelected(ptt.Active.getValue().equals("1"));
-        
+
     }
 
 }

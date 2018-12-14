@@ -7,6 +7,14 @@
     -fx-text-fill: white;
     -fx-background-color:   #902e2e
 }
+
+.button-pro {
+    -fx-background-color: #c23d3d ;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-border-color: #c23d3d;
+    -fx-text-fill: #d6c8c8;
+}
  
 .tab-pane {	
     -fx-tab-max-height: 0 ;	

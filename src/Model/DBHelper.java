@@ -33,12 +33,13 @@ public class DBHelper {
 
     public static ArrayList<Job> Jobs;
     public static ArrayList<Department> Departments;
+    public static ArrayList<Company> Companies;
 
     public DBHelper() {
         try {
             Class.forName(JDBC_DRIVER);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
 
@@ -51,9 +52,10 @@ public class DBHelper {
 
             DBHelper.Jobs = this.getJobs();
             DBHelper.Departments = this.getDepartments();
+            DBHelper.Companies = this.getCompanies();
 
         } catch (SQLException ex) {
-            Logger.getLogger(DBHelper.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
         }
     }
 
@@ -62,7 +64,7 @@ public class DBHelper {
             stmt.close();
             conn.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DBHelper.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
         }
     }
 
@@ -115,7 +117,7 @@ public class DBHelper {
             stmt.executeUpdate(sql); // DML
 
         } catch (SQLException e) {
-            System.out.println(e);
+            System.err.println(e);
             return;
         }
 
@@ -166,9 +168,92 @@ public class DBHelper {
                 return p;
             }
         }
+        
         return null;
     }
 
+    
+    
+    public ArrayList<Hardware> getHardwaresInStock(){
+        ArrayList<Hardware> hardwares = new ArrayList<Hardware>();
+        try {
+            String sql;
+            sql = "SELECT * FROM hardware";
+            ResultSet rs = stmt.executeQuery(sql); // DML
+            // stmt.executeUpdate(sql); // DDL
+            //STEP 5: Extract data from result set
+            while (rs.next()) {
+                //Display values
+                Hardware h = new Hardware();
+                h.hardwareID = rs.getInt("hardwareID");
+                h.brand = rs.getString("brand");
+                h.definition = rs.getString("definition");
+                h.price = rs.getDouble("price");
+                h.isBelong = rs.getInt("isBelong");
+                h.isWaste = rs.getInt("isWaste");
+                h.purchaseDate = rs.getDate("purchaseDate");
+                h.computerID = rs.getInt("computerID");
+                int companyID = rs.getInt("companyID");
+                String company = null;
+                for(Company c: DBHelper.Companies){
+                    if(companyID == c.companyID)
+                    {
+                        company = c.name;
+                        break;
+                    }
+                }
+                h.company = company;
+                hardwares.add(h);                
+            }
+            //STEP 6: Clean-up environment
+            rs.close();
+        } catch (SQLException ex) {
+           
+            System.err.println(ex);
+        }
+
+        return hardwares;
+    }
+    
+    public ArrayList<Computer> getComputersInStock(){
+       ArrayList<Computer> computers = new ArrayList<Computer>();
+        try {
+            String sql;
+            sql = "SELECT * FROM computer";
+            ResultSet rs = stmt.executeQuery(sql); // DML
+            // stmt.executeUpdate(sql); // DDL
+            //STEP 5: Extract data from result set
+            while (rs.next()) {
+                //Display values
+                Computer c = new Computer();
+                c.computerID = rs.getInt("computerID");
+                c.brand = rs.getString("brand");
+                c.definition = rs.getString("definition");
+                c.price = rs.getDouble("price");
+                c.isBelong = rs.getInt("isBelong");
+                c.isWaste = rs.getInt("isWaste");
+                c.purchaseDate = rs.getDate("purchaseDate");
+                int companyID = rs.getInt("companyID");
+                String company = null;
+                for(Company co: DBHelper.Companies){
+                    if(companyID == co.companyID)
+                    {
+                        company = co.name;
+                        break;
+                    }
+                }
+                c.company = company;
+                computers.add(c);                
+            }
+            //STEP 6: Clean-up environment
+            rs.close();
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+
+        return computers;
+    }
+    
     public ArrayList<Department> getDepartments() {
         ArrayList<Department> departments = new ArrayList<Department>();
 
@@ -188,7 +273,8 @@ public class DBHelper {
             //STEP 6: Clean-up environment
             rs.close();
         } catch (SQLException ex) {
-            return null;
+            
+            System.err.println(ex);
         }
 
         return departments;
@@ -213,10 +299,37 @@ public class DBHelper {
             //STEP 6: Clean-up environment
             rs.close();
         } catch (SQLException ex) {
-            return null;
+            
+            System.err.println(ex);
         }
 
         return jobs;
+    }
+    
+    public ArrayList<Company> getCompanies(){
+        ArrayList<Company> companies = new ArrayList<Company>();
+
+        try {
+            String sql;
+            sql = "SELECT * FROM company";
+            ResultSet rs = stmt.executeQuery(sql); // DML
+            // stmt.executeUpdate(sql); // DDL
+            //STEP 5: Extract data from result set
+            while (rs.next()) {
+                //Display values
+                Company c = new Company();
+               c.companyID = rs.getInt("companyID");
+               c.name = rs.getString("name");
+               companies.add(c);
+            }
+            //STEP 6: Clean-up environment
+            rs.close();
+        } catch (SQLException ex) {
+            
+            System.err.println(ex);
+        }
+
+        return companies;
     }
 
     public ArrayList<Personnel> getPersonnels() {
@@ -255,7 +368,8 @@ public class DBHelper {
             //STEP 6: Clean-up environment
             rs.close();
         } catch (SQLException ex) {
-            return null;
+            
+            System.err.println(ex);
         }
         return personnels;
     }
