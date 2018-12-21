@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" fx:id="signUpAnchorPane" prefHeight="450.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="Controller.SignUpController">
+<AnchorPane id="AnchorPane" fx:id="signUpAnchorPane" prefHeight="450.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SignUpController">
    <children>
       <Label alignment="CENTER" layoutX="220.0" layoutY="32.0" prefHeight="60.0" prefWidth="160.0" text="SIGN UP" textAlignment="CENTER" textFill="#652424">
          <font>
@@ -23,7 +22,7 @@
       <JFXTextField fx:id="textLastnameField" focusColor="#b22828" labelFloat="true" layoutX="50.0" layoutY="240.0" prefHeight="40.0" prefWidth="220.0" promptText="Last Name" />
       <JFXComboBox fx:id="comboBoxJob" focusColor="#b22828" labelFloat="true" layoutX="330.0" layoutY="240.0" onAction="#comboBoxJob_Click" prefHeight="40.0" prefWidth="220.0" promptText="Job" />
       <JFXComboBox fx:id="comboBoxDepartment" focusColor="#b22828" labelFloat="true" layoutX="330.0" layoutY="310.0" prefHeight="40.0" prefWidth="220.0" promptText="Department" />
-      <JFXButton fx:id="buttonSignIn" layoutX="220.0" layoutY="396.0" onAction="#buttonSignIn_Click" prefHeight="40.0" prefWidth="161.0" text="Sign In" />
-      <JFXButton fx:id="buttonSignUp" layoutX="389.0" layoutY="396.0" onAction="#buttonSignUp_Click" prefHeight="40.0" prefWidth="161.0" text="Sign Up" />
+      <JFXButton fx:id="buttonSignIn" layoutX="220.0" layoutY="396.0" onAction="#buttonSignIn_Click" prefHeight="40.0" prefWidth="161.0" styleClass="button-pro" text="Sign In" />
+      <JFXButton fx:id="buttonSignUp" layoutX="389.0" layoutY="396.0" onAction="#buttonSignUp_Click" prefHeight="40.0" prefWidth="161.0" styleClass="button-pro" text="Sign Up" />
    </children>
 </AnchorPane>

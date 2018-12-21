@@ -16,7 +16,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -26,10 +28,15 @@ import javafx.stage.Stage;
  * @author OGUZHAN
  */
 public class AccessFXML {
-    
-    public static Personnel personnelCurrent;
 
-    public void show(String url,String title, AnchorPane ap) {
+    public static Personnel personnelCurrent;
+    public static AnchorPane ap;
+
+    public void show(String url, String title, AnchorPane ap) {
+
+        if (ap == null) {
+            ap = this.ap;
+        }
         try {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource(url));
             Scene home_page_scene = new Scene(home_page_parent);
@@ -44,13 +51,24 @@ public class AccessFXML {
     }
 
     public void _modal(String title, String description, String buttonString, AnchorPane panel) {
+        if (description.length() >= 100) {
+            String subs = "";
+            for (int i = 0; i < description.length(); i += 100) {
+                subs += description.substring(i, i + 100 > description.length() ? description.length() : i + 100) + "\n";
+            }
+            description = subs;
+        }
+        if (panel == null) {
+            panel = this.ap;
+        }
         JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Text(title));
         content.setBody(new Text(description));
-        content.setPrefSize(300, 100);
+        content.setPrefSize(300, 150);
         StackPane stackPane = new StackPane();
         stackPane.autosize();
-        JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.TOP);
+        JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.CENTER);
+        dialog.setBackground(Background.EMPTY);
         JFXButton button = new JFXButton(buttonString);
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -58,12 +76,13 @@ public class AccessFXML {
                 dialog.close();
             }
         });
+
         button.setButtonType(com.jfoenix.controls.JFXButton.ButtonType.RAISED);
         button.setPrefHeight(32);
         content.setActions(button);
         panel.getChildren().add(stackPane);
-        AnchorPane.setTopAnchor(stackPane, 140.0);
-        AnchorPane.setLeftAnchor(stackPane, 175.0);
+        AnchorPane.setTopAnchor(stackPane, panel.getHeight() / 2 - 75 + 0.0);
+        AnchorPane.setLeftAnchor(stackPane, panel.getWidth() / 2 - 150 + 0.0);
         dialog.show();
     }
 

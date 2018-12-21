@@ -44,17 +44,19 @@ public class SignInController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        if(AccessFXML.personnelCurrent == null)
+        if (AccessFXML.personnelCurrent == null) {
             return;
+        }
         if (AccessFXML.personnelCurrent.username != null && AccessFXML.personnelCurrent.password != null) {
             textUsernameField.setText(AccessFXML.personnelCurrent.username);
             textPasswordField.setText(AccessFXML.personnelCurrent.password);
         }
+        AccessFXML.ap = this.signInAnchorPane;
     }
 
     @FXML
     private void buttonSignUp_Click(ActionEvent event) {
-        accessFXML.show("SignUp.fxml", "Sign Up", signInAnchorPane);
+        accessFXML.show("SignUp.fxml", "Sign Up Panel", signInAnchorPane);
     }
 
     @FXML
@@ -66,7 +68,7 @@ public class SignInController implements Initializable {
             accessFXML._modal("Error", "Username or Password Could Not Empty", "OKEY", signInAnchorPane);
             return;
         }
-        
+
         DBHelper dp = new DBHelper();
         dp.Open();
         Personnel p = dp.getPersonnel(username, password);
@@ -76,10 +78,24 @@ public class SignInController implements Initializable {
             accessFXML._modal("Error", "Username or Password is Wrong", "OKEY", signInAnchorPane);
             return;
         }
+
+        if (p.Active == 0) {
+            accessFXML._modal("Error", "This Personnel Is Not Active!Please You Must See The Admin!", "OKEY", signInAnchorPane);
+            return;
+        }
+
+        AccessFXML.personnelCurrent = p;
         
-        accessFXML.personnelCurrent = p;
-        if (p.Job.equals("Admin"))
-            accessFXML.show("AdminScreen.fxml", "Admin Panel", signInAnchorPane);
+        if (p.Job.equals("Admin")) {
+            accessFXML.show("AdminScreen.fxml", "Admin Managment Panel", signInAnchorPane);
+        } else if (p.Job.equals("Sales Responsible")) {
+            accessFXML.show("AdminScreen.fxml", "Sales Managment Panel", signInAnchorPane);
+        } else if (p.Job.equals("Department Manager")) {
+            accessFXML.show("DepartmentManagerScreen.fxml", "Department Manager Panel", signInAnchorPane);
+        } else {
+            accessFXML._modal("DEACTİVE", "This personnel can't use the managment app now! Please TRY LATER!", "OKEY", signInAnchorPane);
+
+        }
 
     }
 

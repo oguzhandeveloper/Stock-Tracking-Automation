@@ -13,27 +13,22 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.layout.BorderPane;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import java.util.ArrayList;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.Date;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 
 /**
  *
@@ -76,8 +71,6 @@ public class AdminScreenController implements Initializable {
     @FXML
     private Tab tabAssignResponsibility;
     @FXML
-    private Tab tabReport;
-    @FXML
     private Tab tabRemoveResponsibility;
     @FXML
     private Tab tabresponsibilities;
@@ -88,41 +81,470 @@ public class AdminScreenController implements Initializable {
     @FXML
     private JFXButton buttonWasteStorage;
     @FXML
-    private JFXButton buttonResponsibilities;
-    @FXML
     private JFXTreeTableView<ProductTreeTable> treeTableViewStock;
     @FXML
     private JFXButton buttonWasteStorageStock;
     @FXML
     private JFXButton buttonResponsibilityStock;
     @FXML
-    private JFXButton buttomComputerStock;
+    private JFXTreeTableView<ProductTreeTable> treeTableViewWasteStorage;
     @FXML
-    private JFXButton buttonHardwareStock;
-    
+    private JFXTreeTableView<AssignTreeTable> treeTableViewResposibility;
+    @FXML
+    private JFXButton buttonWasteStorageResponsibility;
+    @FXML
+    private JFXButton buttonResponsibilityRemoveResponsiblity;
+    @FXML
+    private JFXTextField textFieldPersonnelIDResponsibilityAssign;
+    @FXML
+    private JFXTextField textFieldNameResponsibilityAssign;
+    @FXML
+    private JFXTextField textFieldLastNameResponsibilityAssign;
+    @FXML
+    private JFXTextField textFieldBrandResponsibilityAssign;
+    @FXML
+    private JFXTextField textFieldDefinitionResponsibilityAssign;
+    @FXML
+    private JFXTreeTableView<AssignFullTreeTable> treeTableViewResposibilityAssign;
+    @FXML
+    private JFXButton buttonResponsibilityResponsibilityAssign;
+    @FXML
+    private JFXTextField textFieldRemoveAssignPersonnelID;
+    @FXML
+    private JFXTextField textFieldRemoveAssignName;
+    @FXML
+    private JFXTextField textFieldRemoveAssignLastName;
+    @FXML
+    private JFXTreeTableView<AssignFullTreeTable> treeTableViewRemoveAssign;
+    @FXML
+    private JFXButton buttonRemoveAssignRemoveAssign;
+
+    @FXML
+    private JFXButton buttonProductResponsibility;
+    @FXML
+    private JFXButton buttonProductResponsibilityAssign;
+    @FXML
+    private JFXButton buttonProductStock;
+    @FXML
+    private JFXButton buttonProductWasteStorage;
+    @FXML
+    private JFXTextField textFieldProductIDResponsibilityAssign;
+    @FXML
+    private JFXButton buttonRemoveFromWasteStorage;
+    @FXML
+    private JFXButton buttonAssigns;
+    @FXML
+    private Label labelWindowJob;
+    @FXML
+    private JFXButton buttonProfile;
+    @FXML
+    private Tab tabProfile;
+    @FXML
+    private JFXTextField textFieldProfileUsername;
+    @FXML
+    private JFXTextField textFieldProfileName;
+    @FXML
+    private JFXPasswordField textPasswordFieldProfileConfirm;
+    @FXML
+    private JFXTextField textFieldProfileLastName;
+    @FXML
+    private JFXComboBox<String> comboBoxProfileJob;
+    @FXML
+    private JFXComboBox<String> comboBoxProfileDepartment;
+    @FXML
+    private JFXButton buttonProfileUpdate;
+    @FXML
+    private JFXTextField textFieldProfilePersonnelID;
+    @FXML
+    private Label labelWindowName;
+    @FXML
+    private JFXButton buttonBuy;
+    @FXML
+    private Tab tabBuy;
+
+    @FXML
+    private JFXTreeTableView<BuyStockTreeTable> treeTableViewBuy;
+
+    @FXML
+    private JFXButton buttonBuyProduct;
+
     ///TreeViews TreeTableView içerisine eklenecek olanları ayarlar
     TreeTableViewer treeTableViewer = new TreeTableViewer();
+
+    //AccessFXML
+    AccessFXML accessFXML = new AccessFXML();
+
+    //isTurnPersonnel is who has a turn
+    public boolean isTurnPersonnel;
+    @FXML
+    private JFXButton buttonExit;
+    @FXML
+    private JFXButton buttonAllPersonnelReports;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         viewPersonnels();
+        AccessFXML.ap = this.anchorPaneAdmin;
+
+        UpdateTop();
+        if (AccessFXML.personnelCurrent.Job.equals("Sales Responsible")) {
+            buttonUpdatePersonnel.setVisible(false);
+        }
+
+    }
+
+    /**
+     * Panelin en üstündeki alanı güncellemek için
+     */
+    public void UpdateTop() {
+        labelWindowName.setText(AccessFXML.personnelCurrent.name + " " + AccessFXML.personnelCurrent.lastName);
+        labelWindowJob.setText(AccessFXML.personnelCurrent.Job);
+    }
+
+    /**
+     * Personnel Panelinde personnelleri tabview'a yüklemek için
+     */
+    public void viewPersonnels() {
+        treeTableViewer.viewPersonnels(treeTableViewPersonnels,"");
+    }
+
+    /**
+     * Stock Panelinde produc'ları tabview'a yüklemek için
+     */
+    public void viewProductsInStock() {
+        treeTableViewer.viewProduct(treeTableViewStock, false);
+    }
+
+    /**
+     * Waste Storage Panelinde produc'ları tabview'a yüklemek için
+     */
+    public void viewProductsInWasteStorage() {
+        treeTableViewer.viewProduct(treeTableViewWasteStorage, true);
+    }
+
+    /**
+     * Assings (Zimmetler) olduğu panelde product'ları yüklemek için
+     */
+    public void viewAssignsProducts() {
+        treeTableViewer.viewAssignAll(treeTableViewResposibility,"");
+    }
+
+    /**
+     * AssingAdd (Zimmet atama) olduğu panelde product'ları yüklemek için
+     */
+    public void viewAssignAddProducts() {
+        treeTableViewer.viewAssignAddProduct(treeTableViewResposibilityAssign);
+    }
+
+    /**
+     * Seçilen personnelin üstüne zimmetli tüm ürünleri görmek için
+     *
+     * @param p Seçilen Personnel
+     */
+    public void viewAssignInPersonnel(Personnel p) {
+        treeTableViewer.viewAssignInRemoveAssign(treeTableViewRemoveAssign, p);
+    }
+
+    /**
+     * AssingAdd (Zimmet atama) olduğu panelde personnel'lerı yüklemek için
+     */
+    public void viewAssignAddPersonnels() {
+        treeTableViewer.viewAssignAddPersonnel(treeTableViewResposibilityAssign);
     }
     
-    public void viewPersonnels(){
-        treeTableViewer.viewPersonnels(treeTableViewPersonnels);
+    public void viewBuyProduct(){
+        treeTableViewer.viewBuyProduct(treeTableViewBuy);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * Stock Panel içersinde seçilmiş olan nesneyi geriye döndürür
+     *
+     * @return item Geriye dönen liste içerisinde seçilmiş olan nesne
+     */
+    public TreeItem<ProductTreeTable> isSelectedItemStock() {
+        TreeItem<ProductTreeTable> item = treeTableViewStock.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
+    }
+
+    /**
+     * Personnel Panel içerisinde seçilmiş olan nesneyi geriye döndürür
+     *
+     * @return item Geriye dönen liste içerisinde seçilmiş olan nesne
+     */
+    public TreeItem<PersonnelTreeTable> isSelectedItemPersonnel() {
+        TreeItem<PersonnelTreeTable> item = treeTableViewPersonnels.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
+    }
+
+    /**
+     * Assings Panel içerisinde seçilmiş olan nesneyi geriye döndürür
+     *
+     * @return item Geriye dönen liste içerisinde seçilmiş olan nesne
+     */
+    public TreeItem<AssignTreeTable> isSelectedItemAssign() {
+        TreeItem<AssignTreeTable> item = treeTableViewResposibility.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
+    }
+
+    /**
+     * AssingAdd Panel içerisinde seçilmiş olan nesneyi geriye döndürür
+     *
+     * @return item Geriye dönen liste içerisinde seçilmiş olan nesne
+     */
+    public TreeItem<AssignFullTreeTable> isSelectedItemAssignAdd() {
+        TreeItem<AssignFullTreeTable> item = treeTableViewResposibilityAssign.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
+    }
+
+    /**
+     * Remove Assign Panel içerisinde seçilmiş olan nesneyi geriye döndürür
+     *
+     * @return item Geriye dönen liste içerisinde seçilmiş olan nesne
+     */
+    public TreeItem<AssignFullTreeTable> isSelectedItemRemoveAssign() {
+        TreeItem<AssignFullTreeTable> item = treeTableViewRemoveAssign.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
+    }
+
+    /**
+     * Waste Storage Panel içerisinde seçilmiş olan nesneyi geriye döndürür
+     *
+     * @return item Geriye dönen liste içerisinde seçilmiş olan nesne
+     */
+    public TreeItem<ProductTreeTable> isSelectedWasteStorage() {
+        TreeItem<ProductTreeTable> item = treeTableViewWasteStorage.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
     }
     
-    public void viewComputersInStock(){
-        treeTableViewer.viewProduct(treeTableViewStock, true,false);
+    public TreeItem<BuyStockTreeTable> isSelectedBuyProduct(){
+        TreeItem<BuyStockTreeTable> item = treeTableViewBuy.getSelectionModel().getSelectedItem();
+        isNullItem(item);
+        return item;
     }
-    public void viewHardwaresInStock(){
-        treeTableViewer.viewProduct(treeTableViewStock, false,false);
+
+    /**
+     * Bir treeTableView nesnesi içersinde bir nesnenin seçilip seçilmediğini
+     * kontrol etmek için kullanılır. Nesne seçilmiş ise bir işlem yapmaz.
+     * Seçilmemiş ise ekrana bir hata mesajı döndürür. Bu fonksiyon kullanıldığı
+     * yerden sonraki işlemler için herhangi bir değer döndürmez. Kullanıldığı
+     * yerde TreeItem<T> item nesnesi işlemi durdurmak için tekrar kontrol
+     * edilmelidir.
+     *
+     * @param <T> TreeItem<T> RecursiveTreeObject<T> class'ından kalıtılmış olan
+     * nesne tipinde işlem gerçekleştirmek için
+     * @param t TreeItem<T> nesnesi
+     */
+    private <T> void isNullItem(TreeItem<T> t) {
+        if (t == null) {
+            accessFXML._modal("Error", "No Items Selected! Please Select The Item In Table!", "OKEY", anchorPaneAdmin);
+        }
     }
-    
-    
+
+    /**
+     * AssignAdd içerisinde bulunan textField alanlarını temizler.
+     */
+    public void cleanAssignAddTexts() {
+        textFieldBrandResponsibilityAssign.setText("");
+        textFieldDefinitionResponsibilityAssign.setText("");
+        textFieldLastNameResponsibilityAssign.setText("");
+        textFieldNameResponsibilityAssign.setText("");
+        textFieldPersonnelIDResponsibilityAssign.setText("");
+        textFieldProductIDResponsibilityAssign.setText("");
+    }
+
+    /**
+     * Personnel Panel içerisinde bulunan textField ve toggleButton temizler
+     */
+    public void cleanPersonnelTexts() {
+        textFieldPersonnelID.setText("");
+        textFieldDepartment.setText("");
+        textFieldJob.setText("");
+        textFieldLastName.setText("");
+        textFieldName.setText("");
+        toggleButtonActive.setSelected(false);
+    }
 
     @FXML
+    private void treeTableViewPersonnels_Click(MouseEvent event) {
+        TreeItem<PersonnelTreeTable> item = treeTableViewPersonnels.getSelectionModel().getSelectedItem();
+        PersonnelTreeTable ptt = item.getValue();
+        textFieldPersonnelID.setText(ptt.personnelID.getValue());
+        textFieldName.setText(ptt.name.getValue());
+        textFieldLastName.setText(ptt.lastName.getValue());
+        textFieldJob.setText(ptt.Job.getValue());
+        textFieldDepartment.setText(ptt.Department.getValue());
+        toggleButtonActive.setSelected(ptt.Active.getValue().equals("1"));
+
+    }
+
+    @FXML
+    void treeTableViewResposibilityAssign_Click(MouseEvent event) {
+        TreeItem<AssignFullTreeTable> item = isSelectedItemAssignAdd();
+        if (item == null) {
+            return;
+        }
+        if (isTurnPersonnel) {
+            AssignFullTreeTable ptt = item.getValue();
+            textFieldPersonnelIDResponsibilityAssign.setText(ptt.personnelID.getValue());
+            textFieldNameResponsibilityAssign.setText(ptt.name.getValue());
+            textFieldLastNameResponsibilityAssign.setText(ptt.lastName.getValue());
+        } else {
+            AssignFullTreeTable ptt = item.getValue();
+            textFieldBrandResponsibilityAssign.setText(ptt.brand.getValue());
+            textFieldDefinitionResponsibilityAssign.setText(ptt.definition.getValue());
+            textFieldProductIDResponsibilityAssign.setText(ptt.productID.getValue());
+        }
+
+    }
+
+    private void uploadProfile() {
+        Personnel p = AccessFXML.personnelCurrent;
+        textFieldProfilePersonnelID.setText(p.personnelID + "");
+        textFieldProfileUsername.setText(p.username);
+        textFieldProfileName.setText(p.name);
+        textFieldProfileLastName.setText(p.lastName);
+
+        DBHelper db = new DBHelper();
+        db.Open();
+        ArrayList<Job> jobs = DBHelper.Jobs;
+        ArrayList<Department> departments = DBHelper.Departments;
+        db.Close();
+
+        String[] jobStrings = new String[jobs.size()];
+        String[] departmentStrings = new String[departments.size()];
+        //String[] jobStrings = new String[jobs.size()];
+        for (int i = 0; i < jobs.size(); i++) {
+            jobStrings[i] = jobs.get(i).name;
+        }
+        for (int i = 0; i < departments.size(); i++) {
+            departmentStrings[i] = departments.get(i).name;
+        }
+
+        comboBoxProfileJob.getItems().addAll(jobStrings);
+        comboBoxProfileDepartment.getItems().addAll(departmentStrings);
+        comboBoxProfileJob.setValue(p.Job);
+        comboBoxProfileDepartment.setValue(p.Department);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    /////////////////////////////LEFT VBOX PANEL///////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonAssigns_Click(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabresponsibilities);
+        viewAssignsProducts();
+    }
+
+    @FXML
+    private void buttonProfile_Click(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabProfile);
+        uploadProfile();
+    }
+
+    @FXML
+    private void buttonPersonnel_Click(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabPersonnel);
+        cleanPersonnelTexts();
+        viewPersonnels();
+    }
+
+    @FXML
+    private void buttonStock_Click(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabStock);
+        viewProductsInStock();
+    }
+
+    @FXML
+    private void buttonWasteStorage_Click(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabWasteStorage);
+        viewProductsInWasteStorage();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    /////////////////////////////PERSONNEL PANEL///////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonResponsibilityAdd_Click(ActionEvent event) {
+        String id = textFieldPersonnelID.getText();
+        TreeItem<PersonnelTreeTable> item = isSelectedItemPersonnel();
+        if (id.trim().equals("")) {
+            return;
+        }
+
+        PersonnelTreeTable ptt = item.getValue();
+        isTurnPersonnel = false;
+        cleanAssignAddTexts();
+
+        textFieldPersonnelIDResponsibilityAssign.setText(ptt.personnelID.getValue());
+        textFieldNameResponsibilityAssign.setText(ptt.name.getValue());
+        textFieldLastNameResponsibilityAssign.setText(ptt.lastName.getValue());
+
+        textFieldBrandResponsibilityAssign.setText("");
+        textFieldDefinitionResponsibilityAssign.setText("");
+        textFieldProductIDResponsibilityAssign.setText("");
+
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabAssignResponsibility);
+
+        viewAssignAddProducts();
+
+    }
+
+    @FXML
+    private void buttonResponsibilityRemove_Click(ActionEvent event) {
+        TreeItem<PersonnelTreeTable> item = isSelectedItemPersonnel();
+        String personnelID = textFieldPersonnelID.getText();
+        String name = textFieldName.getText();
+        String lastname = textFieldLastName.getText();
+        if (personnelID.trim().equals("") /*&& item == null*/) {
+            return;
+        }
+
+        /*PersonnelTreeTable ptt = item.getValue();
+
+        Personnel p = ptt.returnPersonnel();*/
+        Personnel p = new Personnel();
+        p.personnelID = Integer.parseInt(personnelID);
+
+        viewAssignInPersonnel(p);
+        textFieldRemoveAssignPersonnelID.setText(personnelID);
+        textFieldRemoveAssignName.setText(name);
+        textFieldRemoveAssignLastName.setText(lastname);
+
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabRemoveResponsibility);
+
+    }
+
+    /**
+     * Personnel Panel içerisinde seçilen personelin herhangi bir değeri değiş-
+     * tirildikten sonra database' de güncellemek için kullanılır
+     *
+     * @param event
+     */
+    @FXML
     private void buttonUpdatePersonnel_Click(ActionEvent event) {
+        TreeItem<PersonnelTreeTable> item = isSelectedItemPersonnel();
+        if (item == null) {
+            return;
+        }
+
         String name = textFieldName.getText();
         String lastname = textFieldLastName.getText();
         int personnelID = Integer.parseInt(textFieldPersonnelID.getText());
@@ -131,7 +553,7 @@ public class AdminScreenController implements Initializable {
         int active = toggleButtonActive.isSelected() ? 1 : 0;
 
         Personnel person = new Personnel();
-        person.ID = personnelID;
+        person.personnelID = personnelID;
         person.name = name;
         person.lastName = lastname;
         person.Job = job;
@@ -147,78 +569,326 @@ public class AdminScreenController implements Initializable {
     }
 
     @FXML
-    void buttomComputerStock_Click(ActionEvent event) {
-        viewComputersInStock();
-    }
-
-    @FXML
-    void buttonHardwareStock_Click(ActionEvent event) {
-        viewHardwaresInStock();
-    }
-    
-     @FXML
-    void buttonResponsibilityStock_Click(ActionEvent event) {
-
-    }
-    
-      @FXML
-    void buttonWasteStorageStock_Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void buttonResponsibilityRemove_Click(ActionEvent event) {
-
-    }
-
-    @FXML
     private void buttonPersonnelReport_Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void buttonResponsibilityAdd_Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void buttonPersonnel_Click(ActionEvent event) {
-        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
-        selectionModel.select(tabPersonnel);
-        viewPersonnels();
-    }
-
-    @FXML
-    private void buttonStock_Click(ActionEvent event) {
-        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
-        selectionModel.select(tabStock);
-        viewComputersInStock();
-    }
-
-    @FXML
-    private void buttonWasteStorage_Click(ActionEvent event) {
-        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
-        selectionModel.select(tabWasteStorage);
-    }
-
-    @FXML
-    private void buttonResponsibilities_Click(ActionEvent event) {
-        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
-        selectionModel.select(tabresponsibilities);
+        TreeItem<PersonnelTreeTable> item = isSelectedItemPersonnel();
+        if(item == null)
+            return;
+        PersonnelTreeTable ptt = item.getValue();
+        Personnel p = ptt.returnPersonnel();
+        Report report = new Report();
+        report.ShowReport(p);
         
     }
-
+    
     @FXML
-    private void treeTableViewPersonnels_Click(MouseEvent event) {
-        TreeItem<PersonnelTreeTable> item = treeTableViewPersonnels.getSelectionModel().getSelectedItem();
-        PersonnelTreeTable ptt = item.getValue();
-        textFieldPersonnelID.setText(ptt.ID.getValue());
-        textFieldName.setText(ptt.name.getValue());
-        textFieldLastName.setText(ptt.lastName.getValue());
-        textFieldJob.setText(ptt.Job.getValue());
-        textFieldDepartment.setText(ptt.Department.getValue());
-        toggleButtonActive.setSelected(ptt.Active.getValue().equals("1"));
+    private void buttonAllPersonnelReports_Click(ActionEvent event) {
+        Report report = new Report();
+        report.ShowReport();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////STOCK PANEL////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonProductStock_Click(ActionEvent event) {
+        viewProductsInStock();
+    }
+
+    /**
+     * Stok Panel içerisinde seçilen nesnenin bir personnele atamak için Assing
+     * butonuna tıklanırsa AssingAdd Paneline gidilir ve orada product
+     * bilgilerini ilgili textField' lara ekledikten sonra treeTableView
+     * nesnesine Personnel'leri yükler
+     *
+     * @param event
+     */
+    @FXML
+    void buttonResponsibilityStock_Click(ActionEvent event) {
+        TreeItem<ProductTreeTable> item = isSelectedItemStock();
+        if (item == null) {
+            return;
+        }
+
+        ProductTreeTable ptt = item.getValue();
+        viewAssignAddPersonnels();
+
+        cleanAssignAddTexts();
+
+        textFieldProductIDResponsibilityAssign.setText(ptt.productID.getValue());
+        textFieldDefinitionResponsibilityAssign.setText(ptt.definition.getValue());
+        textFieldBrandResponsibilityAssign.setText(ptt.brand.getValue());
+
+        isTurnPersonnel = true;
+
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabAssignResponsibility);
+    }
+
+    /**
+     * Stock içerisnde seçilen nesnenin Waste Storage'e taşınaması
+     * istenirse(yani atığa ayrılırsa) İlgili nesneyi treeTableView' dan çeker
+     * ve atar.
+     *
+     * @param event
+     */
+    @FXML
+    void buttonWasteStorageStock_Click(ActionEvent event) {
+        TreeItem<ProductTreeTable> item = isSelectedItemStock();
+        if (item == null) {
+            return;
+        }
+
+        ProductTreeTable ptt = item.getValue();
+        Product p = ptt.getProduct();
+
+        DBHelper db = new DBHelper();
+        db.Open();
+        db.RemoveToWasteStorage(p);
+        db.Close();
+        viewProductsInStock();
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////WASTE STORAGE PANEL/////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonProductWasteStorage_Click(ActionEvent event) {
+        viewProductsInWasteStorage();
+    }
+
+    @FXML
+    private void buttonRemoveFromWasteStorage_Click(ActionEvent event) {
+        TreeItem<ProductTreeTable> item = isSelectedWasteStorage();
+        if (item == null) {
+            return;
+        }
+
+        ProductTreeTable ptt = item.getValue();
+        Product p = ptt.getProduct();
+        DBHelper db = new DBHelper();
+        db.Open();
+        db.RemoveFromWasteStorage(p);
+        db.Close();
+
+        viewProductsInWasteStorage();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////ASSIGNS PANEL/////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonProductResponsibility_Click(ActionEvent event) {
+        viewAssignsProducts();
+    }
+
+    @FXML
+    void buttonResponsibilityRemoveResponsiblity_Click(ActionEvent event) {
+
+        TreeItem<AssignTreeTable> item = isSelectedItemAssign();
+        if (item == null) {
+            return;
+        }
+
+        AssignTreeTable astt = item.getValue();
+        Assign r = astt.getResponsibility();
+        DBHelper db = new DBHelper();
+        db.Open();
+        db.RemoveAssign(r);
+        db.Close();
+
+        viewAssignsProducts();
+
+    }
+
+    @FXML
+    void buttonWasteStorageResponsibility_Click(ActionEvent event) {
+        TreeItem<AssignTreeTable> item = isSelectedItemAssign();
+        if (item == null) {
+            return;
+        }
+
+        AssignTreeTable rtt = item.getValue();
+        Assign r = rtt.getResponsibility();
+        DBHelper db = new DBHelper();
+        db.Open();
+        //Ürünün zimmeti kaldırılıyor
+        db.RemoveAssign(r);
+        //Sonra ürün WasteStorage taşınıyor 
+        Product p = new Product();
+        p.productID = r.productID;
+        db.RemoveToWasteStorage(p);
+        db.Close();
+
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabWasteStorage);
+        viewProductsInWasteStorage();
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////ASSIGN ADD PANEL////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonProductResponsibilityAssign_Click(ActionEvent event) {
+        if (!isTurnPersonnel) {
+            viewAssignAddProducts();
+        }
+    }
+
+    /**
+     *
+     * @param event
+     */
+    @FXML
+    void buttonResponsibilityResponsibilityAssign_Click(ActionEvent event) {
+        int personnelID = 0;
+        int productID = 0;
+        String name = null;
+        String lastName = null;
+        String brand = null;
+        String definition = null;
+        try {
+            personnelID = Integer.parseInt(textFieldPersonnelIDResponsibilityAssign.getText());
+            productID = Integer.parseInt(textFieldProductIDResponsibilityAssign.getText());
+            name = textFieldNameResponsibilityAssign.getText();
+            lastName = textFieldLastNameResponsibilityAssign.getText();
+            brand = textFieldBrandResponsibilityAssign.getText();
+            definition = textFieldDefinitionResponsibilityAssign.getText();
+        } catch (Exception e) {
+            accessFXML._modal("Error", "Value Type is Wrong", "OKEY", anchorPaneAdmin);
+            return;
+        }
+
+        Assign r = new Assign();
+        r.personnelID = personnelID;
+        r.productID = productID;
+        r.name = name;
+        r.lastName = lastName;
+        r.brand = brand;
+        r.definition = definition;
+
+        DBHelper db = new DBHelper();
+        db.Open();
+        db.Insert(r);
+        db.Close();
+
+        viewAssignsProducts();
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabresponsibilities);
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////REMOVE ASSIGN PANEL/////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    @FXML
+    void buttonRemoveAssignRemoveAssign_Click(ActionEvent event) {
+        TreeItem<AssignFullTreeTable> item = isSelectedItemRemoveAssign();
+        if (item == null || textFieldRemoveAssignPersonnelID.getText().equals("")) {
+            return;
+        }
+
+        AssignFullTreeTable astt = item.getValue();
+        Assign r = astt.getResponsibilityProduct();
+        r.personnelID = Integer.parseInt(textFieldRemoveAssignPersonnelID.getText());
+        DBHelper db = new DBHelper();
+        db.Open();
+        db.RemoveAssign(r);
+        db.Close();
+
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabresponsibilities);
+        viewAssignsProducts();
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////PROFİLE PANEL/////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void buttonProfileUpdate_Click(ActionEvent event) {
+        int personnelID = Integer.parseInt(textFieldProfilePersonnelID.getText());
+        String username = textFieldProfileUsername.getText();
+        String name = textFieldProfileName.getText();
+        String lastName = textFieldProfileLastName.getText();
+        String job = comboBoxProfileJob.getValue();
+        String department = comboBoxProfileDepartment.getValue();
+        String password = textPasswordFieldProfileConfirm.getText();
+
+        DBHelper db = new DBHelper();
+        db.Open();
+        Personnel p = db.ProfileCheck(personnelID, password);
+
+        if (p == null) {
+            accessFXML._modal("Error", "Password Is Wrong!", "OKEY", anchorPaneAdmin);
+            return;
+        }
+
+        Personnel pr = new Personnel();
+        pr.personnelID = personnelID;
+        pr.name = name;
+        pr.username = username;
+        pr.lastName = lastName;
+        pr.Department = department;
+        pr.Job = job;
+        pr.Active = 1;
+
+        db.Update(pr);
+        db.Close();
+
+        AccessFXML.personnelCurrent = pr;
+
+        uploadProfile();
+        UpdateTop();
+        textPasswordFieldProfileConfirm.setText("");
+    }
+
+    @FXML
+    private void buttonExit_Click(ActionEvent event) {
+        AccessFXML.personnelCurrent = null;
+        accessFXML.show("SignIn.fxml", "Sign In", anchorPaneAdmin);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////BUY PANEL///////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+     @FXML
+    void buttonBuyProduct(ActionEvent event) {
+        TreeItem<BuyStockTreeTable> item = isSelectedBuyProduct();
+        if(item == null){
+            return;
+        }
+        BuyStockTreeTable bptt = item.getValue();
+        BuyStock bs  = bptt.getBuyProduct();
+        
+        Product p = new Product();
+        p.productID = bs.productID;
+        p.brand = bs.brand;
+        p.definition = bs.definition;
+        p.price = bs.price;
+        p.company = bs.company;
+        p.isBelong = 0;
+        p.isWaste = 0;
+        p.purchaseDate = new Date();
+        
+        DBHelper db = new DBHelper();
+        db.Open();
+        db.DeleteProductsBuy(bs);
+        db.Insert(p);
+        db.Close();
+        viewBuyProduct();
+
+    }
+
+    @FXML
+    void buttonBuy_Click(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
+        selectionModel.select(tabBuy);
+        viewBuyProduct();
+    }
+
+    
 }

@@ -16,8 +16,7 @@ import javafx.beans.property.StringProperty;
  */
 public class ProductTreeTable extends RecursiveTreeObject<ProductTreeTable> {
 
-    public StringProperty hardwareID;
-    public StringProperty computerID;
+    public StringProperty productID;
     public StringProperty brand;
     public StringProperty definition;
     public StringProperty price;
@@ -25,12 +24,11 @@ public class ProductTreeTable extends RecursiveTreeObject<ProductTreeTable> {
     public StringProperty isBelong;
     public StringProperty isWaste;
     public StringProperty purchaseDate;
-    
-    public boolean isComputer;
 
-    public ProductTreeTable(String computerID, String brand, String definition, String price,
-            String company, String isBelong, String isWaste, Date purchaseDate,boolean isComputer) {
-        this.computerID = new SimpleStringProperty(computerID);
+    //Computer
+    public ProductTreeTable(String productID, String brand, String definition, String price,
+            String company, String isBelong, String isWaste, Date purchaseDate) {
+        this.productID = new SimpleStringProperty(productID);
         this.brand = new SimpleStringProperty(brand);
         this.definition = new SimpleStringProperty(definition);
         this.price = new SimpleStringProperty(price);
@@ -38,21 +36,19 @@ public class ProductTreeTable extends RecursiveTreeObject<ProductTreeTable> {
         this.isBelong = new SimpleStringProperty(isBelong);
         this.isWaste = new SimpleStringProperty(isWaste);
         this.purchaseDate = new SimpleStringProperty(purchaseDate.toString());
-        this.isComputer = isComputer;
     }
 
-    public ProductTreeTable(String hardwareID, String computerID, String brand, String definition, String price,
-            String company, String isBelong, String isWaste, Date purchaseDate,boolean isComputer) {
-        this.hardwareID = new SimpleStringProperty(hardwareID);
-        this.computerID = new SimpleStringProperty(computerID);
-        this.brand = new SimpleStringProperty(brand);
-        this.definition = new SimpleStringProperty(definition);
-        this.price = new SimpleStringProperty(price);
-        this.company = new SimpleStringProperty(company);
-        this.isBelong = new SimpleStringProperty(isBelong);
-        this.isWaste = new SimpleStringProperty(isWaste);
-        this.purchaseDate = new SimpleStringProperty(purchaseDate.toString());
-        this.isComputer = isComputer;
+    public Product getProduct() {
+        Product p = new Product();
+        p.productID = Integer.parseInt(this.productID.getValue());
+        p.brand = this.brand.getValue();
+        p.definition =  this.definition.getValue();
+        p.price = Double.parseDouble(this.price.getValue());
+        p.company  =  this.company.getValue();
+        p.isBelong  =  Integer.parseInt(this.isBelong.getValue());
+        p.isWaste  =  Integer.parseInt(this.isWaste.getValue());
+        p.purchaseDate = new Date();
+        return p;
     }
 
 }

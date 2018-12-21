@@ -10,7 +10,7 @@ package Model;
  * @author OGUZHAN
  */
 public class Personnel {
-    public int ID;
+    public int personnelID;
     public String username;
     public String password;
     public String name;
@@ -21,6 +21,6 @@ public class Personnel {
 
     @Override
     public String toString() {
-        return "Personnel{" + "ID=" + ID + ", username=" + username + ", password=" + password + ", name=" + name + ", lastName=" + lastName + ", Job=" + Job + ", Department=" + Department + ", Active=" + Active + '}';
+        return "Personnel{" + "ID=" + personnelID + ", username=" + username + ", password=" + password + ", name=" + name + ", lastName=" + lastName + ", Job=" + Job + ", Department=" + Department + ", Active=" + Active + '}';
     }
 }

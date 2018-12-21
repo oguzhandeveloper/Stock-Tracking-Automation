@@ -59,6 +59,7 @@ public class SignUpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        AccessFXML.ap = this.signUpAnchorPane;
         DBHelper db = new DBHelper();
         db.Open();
         ArrayList<Job> jobs = DBHelper.Jobs;
@@ -81,7 +82,7 @@ public class SignUpController implements Initializable {
 
     @FXML
     private void buttonSignIn_Click(ActionEvent event) {
-        accessFXML.show("SignIn.fxml", "Sign In", signUpAnchorPane);
+        accessFXML.show("SignIn.fxml", "Sign In Panel", signUpAnchorPane);
         AccessFXML.personnelCurrent = null;
     }
 
@@ -131,7 +132,7 @@ public class SignUpController implements Initializable {
         db.Insert(p1);
         db.Close();
         AccessFXML.personnelCurrent = p1;
-        accessFXML.show("SignIn.fxml", "Sign In", signUpAnchorPane);
+        accessFXML.show("SignIn.fxml", "Sign In Panel", signUpAnchorPane);
     }
 
     @FXML
