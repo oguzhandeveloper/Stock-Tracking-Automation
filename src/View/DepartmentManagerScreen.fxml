@@ -18,8 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" fx:id="anchorPaneDepartment" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="Controller.DepartmentManagerController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneDepartment" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DepartmentManagerController">
    <children>
       <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="1000.0">
          <center>
