@@ -60,24 +60,29 @@ public class SignUpController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         AccessFXML.ap = this.signUpAnchorPane;
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Job> jobs = DBHelper.Jobs;
-        ArrayList<Department> departments = DBHelper.Departments;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            ArrayList<Job> jobs = DBHelper.Jobs;
+            ArrayList<Department> departments = DBHelper.Departments;
 
-        String[] jobStrings = new String[jobs.size()];
-        String[] departmentStrings = new String[departments.size()];
-        //String[] jobStrings = new String[jobs.size()];
-        for (int i = 0; i < jobs.size(); i++) {
-            jobStrings[i] = jobs.get(i).name;
-        }
-        for (int i = 0; i < departments.size(); i++) {
-            departmentStrings[i] = departments.get(i).name;
-        }
+            String[] jobStrings = new String[jobs.size()];
+            String[] departmentStrings = new String[departments.size()];
+            //String[] jobStrings = new String[jobs.size()];
+            for (int i = 0; i < jobs.size(); i++) {
+                jobStrings[i] = jobs.get(i).name;
+            }
+            for (int i = 0; i < departments.size(); i++) {
+                departmentStrings[i] = departments.get(i).name;
+            }
 
-        db.Close();
-        comboBoxJob.getItems().addAll(jobStrings);
-        comboBoxDepartment.getItems().addAll(departmentStrings);
+            db.Close();
+            comboBoxJob.getItems().addAll(jobStrings);
+            comboBoxDepartment.getItems().addAll(departmentStrings);
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
     }
 
     @FXML
@@ -95,7 +100,7 @@ public class SignUpController implements Initializable {
         String lastName = textLastnameField.getText();
         String job = comboBoxJob.getValue();
         String department = comboBoxDepartment.getValue();
-        
+
         //Herhangi bir alanın boş olup olmadığını kontrol ediyor.
         if (username.trim().equals("") || password.trim().equals("") || passwordConfirm.trim().equals("")
                 || name.trim().equals("") || lastName.trim().equals("")
@@ -109,29 +114,34 @@ public class SignUpController implements Initializable {
             return;
         }
 
-        DBHelper db = new DBHelper();
-        db.Open();
-        
-        Personnel p = db.PersonnelCheck(username);
-        //Personel Zaten Var mı?
-        if (p != null){
-            accessFXML._modal("Error", "This Username is Already Exist. You Can Not Sign Up Again! Please Check!", "OKEY", signUpAnchorPane);
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+
+            Personnel p = db.PersonnelCheck(username);
+            //Personel Zaten Var mı?
+            if (p != null) {
+                accessFXML._modal("Error", "This Username is Already Exist. You Can Not Sign Up Again! Please Check!", "OKEY", signUpAnchorPane);
+                return;
+            }
+
+            Personnel p1 = new Personnel();
+            p1.username = username;
+            p1.password = password;
+            p1.name = name;
+            p1.lastName = lastName;
+            p1.Department = department;
+            p1.Job = job;
+            p1.Active = 1;
+
+            db.Insert(p1);
+            db.Close();
+            AccessFXML.personnelCurrent = p1;
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
             return;
         }
-        
-        Personnel p1 = new Personnel();
-        p1.username = username;
-        p1.password = password;
-        p1.name = name;
-        p1.lastName = lastName;
-        p1.Department = department;
-        p1.Job = job;
-        p1.Active = 1;
-        
-        
-        db.Insert(p1);
-        db.Close();
-        AccessFXML.personnelCurrent = p1;
+
         accessFXML.show("SignIn.fxml", "Sign In Panel", signUpAnchorPane);
     }
 

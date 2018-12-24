@@ -47,6 +47,9 @@ public class Report extends JFrame {
         }
     }
 
+    /**
+     * Database bağlantısını açar
+     */
     public void Open() {
         try {
             //System.out.println("Connecting to database...");
@@ -59,6 +62,9 @@ public class Report extends JFrame {
         }
     }
 
+    /**
+     * Database bağlantısını kapatır
+     */
     public void Close() {
         try {
             stmt.close();

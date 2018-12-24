@@ -40,27 +40,6 @@ public class StockTrackingAutomation extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        /*
-        DBHelper db = new DBHelper();
-        db.Open();
-        Personnel p = db.getPersonnel("oguzhan", "1234");
-        System.out.println(p);
-        db.Close();
-        */
-        DBHelper db = new DBHelper();
-        db.Open();
-        /*ArrayList<Responsibility> responsibilities = db.getResponsibilities();
-        for(Responsibility r: responsibilities)
-            System.out.println(r);*/
-        /*Personnel pr = new Personnel();
-        pr.personnelID = 1;
-        ArrayList<Product> products= db.getProductsInAssign(pr);
-        for(Product p: products)
-            System.out.println(p);
-        db.Close();*/
-        
-        
         launch(args);
     }
 

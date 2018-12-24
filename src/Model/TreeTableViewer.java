@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,12 +19,15 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.util.Callback;
+import View.*;
 
 /**
  *
  * @author OGUZHAN
  */
 public class TreeTableViewer {
+
+    AccessFXML accessFXML = new AccessFXML();
 
     public void viewProduct(JFXTreeTableView<ProductTreeTable> treeTableView, boolean isWasteStorage) {
         //TreeViewTable içerisine eklenecek olan değişkenlerin columnları belirleniyor.
@@ -89,12 +93,17 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<ProductTreeTable> productTreeTables = FXCollections.observableArrayList();
+        ArrayList<Product> products = null;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            products = db.getProduct();
 
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Product> products = db.getProduct();
-
-        db.Close();
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         //isWaste == 0 && isWasteStorage == false ise stockta bulunanları yazdırıyor
@@ -185,12 +194,17 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<AssignFullTreeTable> assignObservableTreeTables = FXCollections.observableArrayList();
+        ArrayList<Product> products = null;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            products = db.getProductsInAssign(p);
 
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Product> products = db.getProductsInAssign(p);
-
-        db.Close();
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         //isWaste == 0 && isWasteStorage == false ise stockta bulunanları yazdırıyor
@@ -267,11 +281,16 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<AssignFullTreeTable> personnelsTreeTables = FXCollections.observableArrayList();
-
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Personnel> personnels = db.getPersonnels("");
-        db.Close();
+        ArrayList<Personnel> personnels = null;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            personnels = db.getPersonnels("");
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         for (Personnel p : personnels) {
@@ -353,12 +372,17 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<AssignFullTreeTable> AssignAddTreeTables = FXCollections.observableArrayList();
+        ArrayList<Product> products = null;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            products = db.getProduct();
 
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Product> products = db.getProduct();
-
-        db.Close();
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         //isWaste == 0 && isWasteStorage == false ise stockta bulunanları yazdırıyor
@@ -402,7 +426,7 @@ public class TreeTableViewer {
         });
 
         JFXTreeTableColumn<BuyStockTreeTable, String> definitionColumn = new JFXTreeTableColumn<>("Definition");
-        definitionColumn.setPrefWidth(150);
+        definitionColumn.setPrefWidth(350);
         definitionColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<BuyStockTreeTable, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<BuyStockTreeTable, String> param) {
@@ -428,12 +452,17 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<BuyStockTreeTable> productTreeTables = FXCollections.observableArrayList();
+        ArrayList<BuyStock> products = null;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            products = db.getProducts();
 
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<BuyStock> products = db.getProducts();
-
-        db.Close();
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         //isWaste == 0 && isWasteStorage == false ise stockta bulunanları yazdırıyor
@@ -509,11 +538,16 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<PersonnelTreeTable> personnelsTreeTables = FXCollections.observableArrayList();
-
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Personnel> personnels = db.getPersonnels(Department);
-        db.Close();
+        ArrayList<Personnel> personnels = null;
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
+            personnels = db.getPersonnels(Department);
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         for (Personnel p : personnels) {
@@ -612,12 +646,19 @@ public class TreeTableViewer {
 
         //treetableview içersine değerler eklenmeden önce değerler arası erişimin(ilişkilerin nasıl olacağı) yapısı belirleniyor.
         ObservableList<AssignTreeTable> assignsTreeTables = FXCollections.observableArrayList();
+        ArrayList<Assign> assigns = null;
 
-        DBHelper db = new DBHelper();
-        db.Open();
-        ArrayList<Assign> assigns = db.getAssigns(Department);
+        try {
+            DBHelper db = new DBHelper();
+            db.Open();
 
-        db.Close();
+            assigns = db.getAssigns(Department);
+
+            db.Close();
+        } catch (Exception e) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + e, "OKEY", null);
+            return;
+        }
 
         //Orjinal Personnel sınıfını treetableview'ın alabileceği formata dönüştüryoruz.
         //isWaste == 0 && isWasteStorage == false ise stockta bulunanları yazdırıyor

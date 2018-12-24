@@ -8,14 +8,17 @@ package Model;
 import java.util.Date;
 
 /**
+ * Database'den gelen veya Database'e gidecek olan zimmetleri taşımak için
+ * kullanılan sınıf
  *
  * @author OGUZHAN
  */
 public class Assign {
+
     public int personnelID;
     public int productID;
     public Date assignDate;
-    
+
     public String name;
     public String lastName;
     public String brand;
@@ -25,10 +28,7 @@ public class Assign {
 
     @Override
     public String toString() {
-        return "Assign{" + "personnelID=" + personnelID + ", AssignDate=" + assignDate + ", name=" + name + ", lastName=" + lastName + ", brand=" + brand + ", definition=" + definition + ", price=" + price +", active= "+active+ '}';
+        return "Assign{" + "personnelID=" + personnelID + ", AssignDate=" + assignDate + ", name=" + name + ", lastName=" + lastName + ", brand=" + brand + ", definition=" + definition + ", price=" + price + ", active= " + active + '}';
     }
 
-    
-    
-    
 }

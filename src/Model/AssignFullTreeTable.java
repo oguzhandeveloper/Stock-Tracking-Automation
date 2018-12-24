@@ -11,6 +11,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
+ * TreeTableView Nesnesinde kullanılmak ve zimmetleri taşımak için kullanılan
+ * sınıf
  *
  * @author OGUZHAN
  */
@@ -55,28 +57,33 @@ public class AssignFullTreeTable extends RecursiveTreeObject<AssignFullTreeTable
         this.purchaseDate = new SimpleStringProperty(purchaseDate.toString());
     }
 
+    /**
+     * Tabloda seçilen nesnenin orjinal halini döndürür.
+     *
+     * @return Assign
+     */
     public Assign getResponsibilityAll() {
         Assign r = new Assign();
         r.personnelID = Integer.parseInt(this.personnelID.getValue());
         r.productID = Integer.parseInt(this.productID.getValue());
-        r.assignDate= new Date();
+        r.assignDate = new Date();
         r.name = this.name.getValue();
-        r.lastName= this.lastName.getValue();
+        r.lastName = this.lastName.getValue();
         r.brand = this.brand.getValue();
         r.definition = this.definition.getValue();
-        r.price= Double.parseDouble(this.price.getValue());
-        r.active= Integer.parseInt(this.Active.getValue());
+        r.price = Double.parseDouble(this.price.getValue());
+        r.active = Integer.parseInt(this.Active.getValue());
         return r;
     }
-    
-    public Assign getResponsibilityProduct(){
+
+    public Assign getResponsibilityProduct() {
         Assign r = new Assign();
-        
+
         r.productID = Integer.parseInt(this.productID.getValue());
-        r.assignDate= new Date();
+        r.assignDate = new Date();
         r.brand = this.brand.getValue();
         r.definition = this.definition.getValue();
-        r.price= Double.parseDouble(this.price.getValue());
+        r.price = Double.parseDouble(this.price.getValue());
         return r;
     }
 }

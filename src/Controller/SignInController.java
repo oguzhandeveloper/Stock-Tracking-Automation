@@ -54,11 +54,19 @@ public class SignInController implements Initializable {
         AccessFXML.ap = this.signInAnchorPane;
     }
 
+    /**
+     * Sign Up Formuna girmek için kullanılır
+     * @param event 
+     */
     @FXML
     private void buttonSignUp_Click(ActionEvent event) {
         accessFXML.show("SignUp.fxml", "Sign Up Panel", signInAnchorPane);
     }
 
+    /**
+     * Giriş bilgileri girildikten sonra giriş yapılır. Ve ilgili panel yönlendirilir
+     * @param event 
+     */
     @FXML
     private void buttonSignIn_Click(ActionEvent event) {
         String username = textUsernameField.getText();
@@ -68,11 +76,16 @@ public class SignInController implements Initializable {
             accessFXML._modal("Error", "Username or Password Could Not Empty", "OKEY", signInAnchorPane);
             return;
         }
-
-        DBHelper dp = new DBHelper();
-        dp.Open();
-        Personnel p = dp.getPersonnel(username, password);
-        dp.Close();
+        Personnel p = null;
+        try {
+            DBHelper dp = new DBHelper();
+            dp.Open();
+            p = dp.getPersonnel(username, password);
+            dp.Close();
+        } catch (Exception ex) {
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + ex, "OKEY", signInAnchorPane);
+            return;
+        }
 
         if (p == null) {
             accessFXML._modal("Error", "Username or Password is Wrong", "OKEY", signInAnchorPane);
@@ -85,7 +98,7 @@ public class SignInController implements Initializable {
         }
 
         AccessFXML.personnelCurrent = p;
-        
+
         if (p.Job.equals("Admin")) {
             accessFXML.show("AdminScreen.fxml", "Admin Managment Panel", signInAnchorPane);
         } else if (p.Job.equals("Sales Responsible")) {
