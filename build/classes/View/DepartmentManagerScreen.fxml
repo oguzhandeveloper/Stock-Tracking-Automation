@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPaneDepartment" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DepartmentManagerController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneDepartment" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DepartmentManagerController">
    <children>
       <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="1000.0">
          <center>
@@ -37,7 +37,8 @@
                               <JFXToggleButton fx:id="toggleButtonActive" disable="true" layoutX="190.0" layoutY="86.0" text="Is It Work?" />
                               <JFXButton fx:id="buttonPersonnelReport" layoutX="370.0" layoutY="100.0" onAction="#buttonPersonnelReport_Click" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="Report" />
                               <JFXButton fx:id="buttonAllPersonnelReports" layoutX="550.0" layoutY="100.0" onAction="#buttonAllPersonnelReports_Click" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="All Personnels Report" />
-                              <JFXTreeTableView fx:id="treeTableViewPersonnels" layoutX="10.0" layoutY="150.0" onMouseClicked="#treeTableViewPersonnels_Click" onSort="#treeTableViewPersonnels_Click" prefHeight="360.0" prefWidth="770.0" />
+                              <JFXTreeTableView fx:id="treeTableViewPersonnels" layoutX="10.0" layoutY="190.0" onMouseClicked="#treeTableViewPersonnels_Click" prefHeight="339.0" prefWidth="770.0" />
+                              <JFXTextField fx:id="textFieldPersonnelSearch" focusColor="#b22828" labelFloat="true" layoutX="582.0" layoutY="159.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -52,6 +53,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </JFXButton>
+                              <JFXTextField fx:id="textFieldAssignSearch" focusColor="#b22828" labelFloat="true" layoutX="591.0" layoutY="49.0" prefHeight="30.0" prefWidth="198.0" promptText="Department" />
                            </children>
                         </AnchorPane>
                      </content>

@@ -22,11 +22,15 @@ import com.jfoenix.controls.JFXToggleButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.function.Predicate;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -45,9 +49,16 @@ public class AdminScreenController implements Initializable {
     //isTurnPersonnel is who has a turn
     public boolean isTurnPersonnel;
     @FXML
-    private JFXButton buttonExit;
+    private JFXTextField textFieldBuyBrand;
     @FXML
-    private JFXButton buttonAllPersonnelReports;
+    private JFXTextField textFieldBuyDefinition;
+    @FXML
+    private JFXTextField textFieldBuyPrice;
+    @FXML
+    private JFXComboBox<String> comboBoxCompanyBuy;
+    @FXML
+    private JFXButton buttonBuyProductAdd;
+    
 
     /**
      * Initialize
@@ -64,7 +75,7 @@ public class AdminScreenController implements Initializable {
         if (AccessFXML.personnelCurrent.Job.equals("Sales Responsible")) {
             buttonUpdatePersonnel.setVisible(false);
         }
-
+        initializeEvent();
     }
 
     /**
@@ -416,6 +427,20 @@ public class AdminScreenController implements Initializable {
     void buttonBuy_Click(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPanePersonnel.getSelectionModel();
         selectionModel.select(tabBuy);
+        ArrayList<Company> companies = null;
+        try{
+        DBHelper db = new DBHelper();
+        db.Open();
+        companies = DBHelper.Companies;
+        db.Close();
+        if(companies == null)
+            throw new Exception("Companies didn't load.");
+        }catch(Exception e){
+            accessFXML._modal("SQL Error", "Sql Querey Error: "+e, "OKEY", anchorPaneAdmin);
+        }
+        for(Company c: companies){
+            comboBoxCompanyBuy.getItems().add(c.name);
+        }
         viewBuyProduct();
     }
 
@@ -953,6 +978,48 @@ public class AdminScreenController implements Initializable {
         viewBuyProduct();
 
     }
+    
+    
+     @FXML
+    private void buttonBuyProductAdd_Click(ActionEvent event) {
+        String brand = "";
+        String definition = "";
+        double price = 0;
+        String company = "";
+        try{
+           brand = textFieldBuyBrand.getText();
+           definition = textFieldBuyDefinition.getText();
+           company = comboBoxCompanyBuy.getValue();
+           price = Double.parseDouble(textFieldBuyPrice.getText());
+           
+           if(brand.equals("") || definition.equals("") || company.equals("") || price == 0)
+           {
+               throw new Exception("Fields can't empty! Please Check!");
+           }
+           
+        }catch(Exception ex){
+            accessFXML._modal("Value Error", "Value type wrong or value not:\n" + ex, "OKEY", null);
+            return;
+        }
+        
+        BuyStock bs = new BuyStock();
+        bs.brand= brand;
+        bs.definition = definition;
+        bs.price = price;
+        bs.company = company;
+        
+        try{
+            DBHelper db = new DBHelper();
+            db.Open();
+            db.Insert(bs);
+            db.Close();
+        }catch(Exception ex){
+            accessFXML._modal("Database SQLException Error", "SQL query error:\n" + ex, "OKEY", null);
+            return;
+        }
+        
+        viewBuyProduct();
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////COMPONENTS///////////////////////////////////
@@ -1082,11 +1149,133 @@ public class AdminScreenController implements Initializable {
     private JFXButton buttonBuy;
     @FXML
     private Tab tabBuy;
-
     @FXML
     private JFXTreeTableView<BuyStockTreeTable> treeTableViewBuy;
-
     @FXML
     private JFXButton buttonBuyProduct;
+    @FXML
+    private JFXButton buttonExit;
+    @FXML
+    private JFXButton buttonAllPersonnelReports;
+    @FXML
+    private JFXTextField textFieldPersonnelSearch;
+    @FXML
+    private JFXTextField textFieldStockSearch;
+    @FXML
+    private JFXTextField textFieldWasteStorageSearch;
+    @FXML
+    private JFXTextField textFieldAssignsSearch;
+    @FXML
+    private JFXTextField textFieldAssignAddSearch;
+    @FXML
+    private JFXTextField textFieldRemoveAssignSearch;
+    @FXML
+    private JFXTextField textFieldBuyProductSearch;
+
+    public void initializeEvent() {
+
+        textFieldPersonnelSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewPersonnels.setPredicate(new Predicate<TreeItem<PersonnelTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<PersonnelTreeTable> t) {
+                        Boolean flag = t.getValue().personnelID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().name.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().lastName.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().Department.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().Job.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+        textFieldStockSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewStock.setPredicate(new Predicate<TreeItem<ProductTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<ProductTreeTable> t) {
+                        Boolean flag = t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().company.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+        textFieldWasteStorageSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewWasteStorage.setPredicate(new Predicate<TreeItem<ProductTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<ProductTreeTable> t) {
+                        Boolean flag = t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().company.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+        textFieldAssignsSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewResposibility.setPredicate(new Predicate<TreeItem<AssignTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<AssignTreeTable> t) {
+                        Boolean flag = t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().personnelID.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().name.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().lastName.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+        textFieldAssignAddSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewResposibilityAssign.setPredicate(new Predicate<TreeItem<AssignFullTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<AssignFullTreeTable> t) {
+                        Boolean flag = t.getValue().productID != null ? t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().company.getValue().toLowerCase().contains(newValue.toLowerCase()) : t.getValue().personnelID.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().name.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().lastName.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+        textFieldRemoveAssignSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewRemoveAssign.setPredicate(new Predicate<TreeItem<AssignFullTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<AssignFullTreeTable> t) {
+                        Boolean flag = t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().personnelID.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().name.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().lastName.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+        textFieldBuyProductSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewBuy.setPredicate(new Predicate<TreeItem<BuyStockTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<BuyStockTreeTable> t) {
+                        Boolean flag = t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().company.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+    }
+
+   
 
 }

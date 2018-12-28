@@ -22,6 +22,9 @@ import com.jfoenix.controls.JFXToggleButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.function.Predicate;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.SortEvent;
@@ -47,8 +50,7 @@ public class DepartmentManagerController implements Initializable {
 
     //isTurnPersonnel is who has a turn
     public boolean isTurnPersonnel;
-    @FXML
-    private AnchorPane anchorPaneDepartment;
+    
 
     /**
      * Initializes the controller class.
@@ -59,7 +61,7 @@ public class DepartmentManagerController implements Initializable {
         AccessFXML.ap = this.anchorPaneDepartment;
 
         UpdateTop();
-
+        inizalizeEvent();
     }
 
     /**
@@ -338,89 +340,101 @@ public class DepartmentManagerController implements Initializable {
     ///////////////////////////////////////////////////////////////////////////
      @FXML
     private TabPane tabPanePersonnel;
-
     @FXML
     private Tab tabPersonnel;
-
     @FXML
     private JFXTextField textFieldPersonnelID;
-
     @FXML
     private JFXTextField textFieldName;
-
     @FXML
     private JFXTextField textFieldLastName;
-
     @FXML
     private JFXTextField textFieldJob;
-
     @FXML
     private JFXTextField textFieldDepartment;
-
     @FXML
     private JFXToggleButton toggleButtonActive;
-
     @FXML
     private JFXButton buttonPersonnelReport;
-
     @FXML
     private JFXButton buttonAllPersonnelReports;
-
     @FXML
     private JFXTreeTableView<PersonnelTreeTable> treeTableViewPersonnels;
-
     @FXML
     private Tab tabresponsibilities;
-
     @FXML
     private JFXTreeTableView<AssignTreeTable> treeTableViewResposibility;
-
     @FXML
     private JFXButton buttonProductResponsibility;
-
     @FXML
     private Tab tabProfile;
-
     @FXML
     private JFXTextField textFieldProfileUsername;
-
     @FXML
     private JFXTextField textFieldProfileName;
-
     @FXML
     private JFXPasswordField textPasswordFieldProfileConfirm;
-
     @FXML
     private JFXTextField textFieldProfileLastName;
-
     @FXML
     private JFXComboBox<String> comboBoxProfileJob;
-
     @FXML
     private JFXComboBox<String> comboBoxProfileDepartment;
-
     @FXML
     private JFXButton buttonProfileUpdate;
-
     @FXML
     private JFXTextField textFieldProfilePersonnelID;
-
     @FXML
     private Label labelWindowJob;
-
     @FXML
     private Label labelWindowName;
-
     @FXML
     private JFXButton buttonExit;
-
     @FXML
     private JFXButton buttonPersonnel;
-
     @FXML
     private JFXButton buttonAssigns;
-
     @FXML
     private JFXButton buttonProfile;
+    @FXML
+    private AnchorPane anchorPaneDepartment;
+    @FXML
+    private JFXTextField textFieldPersonnelSearch;
+    @FXML
+    private JFXTextField textFieldAssignSearch;
+    
+    public void inizalizeEvent(){
+        
+        textFieldPersonnelSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewPersonnels.setPredicate(new Predicate<TreeItem<PersonnelTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<PersonnelTreeTable> t) {
+                        Boolean flag = t.getValue().personnelID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().name.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().lastName.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().Department.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().Job.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+        
+        textFieldAssignSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                treeTableViewResposibility.setPredicate(new Predicate<TreeItem<AssignTreeTable>>() {
+                    @Override
+                    public boolean test(TreeItem<AssignTreeTable> t) {
+                        Boolean flag = t.getValue().productID.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().brand.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().definition.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().price.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().personnelID.getValue().toLowerCase().contains(newValue.toLowerCase())
+                                || t.getValue().name.getValue().toLowerCase().contains(newValue.toLowerCase()) || t.getValue().lastName.getValue().toLowerCase().contains(newValue.toLowerCase());
+                        return flag;
+                    }
+                });
+            }
+        });
+
+    }
+    
 
 }

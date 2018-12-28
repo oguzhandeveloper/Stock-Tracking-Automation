@@ -108,8 +108,8 @@ public class StockTruckingTests {
     @Test
     public void RemoveAssign() {
         Assign r = new Assign(); //PersonnelID ve ProductID yeterlidir
-        r.personnelID = 1;
-        r.productID = 8;
+        r.personnelID = 1; 
+        r.productID = 20;
         try {
             DBHelper db = new DBHelper();
             db.Open();
@@ -131,10 +131,10 @@ public class StockTruckingTests {
         BuyStock bs = new BuyStock();
 
         bs.productID = 20;
-        bs.brand = "LENOVO";
-        bs.definition = "AIO 520 CORE İ5 8400T 1.7 GHZ 4 GB 1 TB 2 GB AMD R...";
-        bs.price = 4999;
-        bs.company = "Amazon";
+        bs.brand = "EXPER";
+        bs.definition = "ACTION DEX777 INTEL CORE İ7 7700 3.6GHZ 8GB 1TB INTEL HD 630 WIN10+OFFICE";
+        bs.price = 4980;
+        bs.company = "Vatan Bilgisayar";
 
         Product p = new Product();
         p.productID = bs.productID;
@@ -167,7 +167,7 @@ public class StockTruckingTests {
     @Test
     public void WasteStorageInStock() {
         Product p = new Product();
-        p.productID = 8; //Sadece productID'si yeterlidir.
+        p.productID = 19; //Sadece productID'si yeterlidir.
 
         try {
             DBHelper db = new DBHelper();
@@ -192,8 +192,8 @@ public class StockTruckingTests {
     public void WasteStorageInAssigns() {
         Assign r = new Assign();
         //personnelID ve productID yeterlidir.
-        r.personnelID = 2;
-        r.productID = 7;
+        r.personnelID = 3;
+        r.productID = 1;
         try {
             DBHelper db = new DBHelper();
             db.Open();
@@ -208,7 +208,7 @@ public class StockTruckingTests {
             fail("SQL query error:\n" + ex);
             return;
         }
-        assertTrue("Ürünü atık deposuna işlemi başarılıdır.", true);
+        assertTrue("Ürünü atık deposuna taşıma işlemi başarılıdır.", true);
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class DBHelper {
 
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private final String DB_URL = "jdbc:mysql://localhost:3306/stocktrackingdatabase?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8";
+    private final String DB_URL = "jdbc:mysql://localhost:3306/stocktruckingdatabase?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8";
 
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -548,6 +548,25 @@ public class DBHelper {
     public void DeleteProductsBuy(BuyStock bs) throws SQLException {
 
         String sql = "DELETE FROM buystock WHERE productID = " + bs.productID;
+        stmt.executeUpdate(sql);
+
+    }
+    
+    public void Insert(BuyStock bs) throws SQLException{
+        
+        
+        int companyID = 1;
+        ArrayList<Company> companies = this.getCompanies();
+        
+        for (Company co : companies) {
+            if (bs.company.equals(co.name)) {
+                companyID = co.companyID;
+                break;
+            }
+        }
+
+        String sql = "INSERT INTO buystock(productID,brand, definition,price, companyID)\n"
+                + "VALUES(" + bs.productID + ",'" + bs.brand + "','" + bs.definition + "'," + bs.price + "," + companyID+ ")";
         stmt.executeUpdate(sql);
 
     }

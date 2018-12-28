@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPaneAdmin" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.AdminScreenController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneAdmin" maxHeight="600.0" maxWidth="1000.0" prefHeight="620.0" prefWidth="1000.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AdminScreenController">
     <children>
         <BorderPane prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
@@ -26,7 +26,7 @@
                     <tabs>
                         <Tab fx:id="tabPersonnel" text="Personnels">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="539.0" prefWidth="800.0">
                                     <children>
                                         <JFXTabPane layoutX="140.0" layoutY="153.0" />
                                         <JFXTextField fx:id="textFieldPersonnelID" editable="false" focusColor="#b22828" labelFloat="true" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Personnel ID" />
@@ -38,13 +38,14 @@
                                         <JFXButton fx:id="buttonUpdatePersonnel" layoutX="550.0" layoutY="100.0" onAction="#buttonUpdatePersonnel_Click" prefHeight="30.0" prefWidth="100.0" styleClass="button-pro" text="Update" />
                                         <JFXButton fx:id="buttonResponsibilityRemove" layoutX="680.0" layoutY="25.0" onAction="#buttonResponsibilityRemove_Click" prefHeight="30.0" prefWidth="100.0" styleClass="button-pro" text="Remove Assign" />
                                         <JFXButton fx:id="buttonPersonnelReport" layoutX="680.0" layoutY="100.0" onAction="#buttonPersonnelReport_Click" prefHeight="30.0" prefWidth="100.0" styleClass="button-pro" text="Report" />
-                                        <JFXButton fx:id="buttonAllPersonnelReports" layoutX="580.0" layoutY="485.0" onAction="#buttonAllPersonnelReports_Click" prefHeight="30.0" prefWidth="200.0" styleClass="button-pro" text="All Personnels Report" />
-                                        <JFXTreeTableView fx:id="treeTableViewPersonnels" layoutX="10.0" layoutY="153.0" onMouseClicked="#treeTableViewPersonnels_Click" prefHeight="320.0" prefWidth="770.0" />
+                                        <JFXTreeTableView fx:id="treeTableViewPersonnels" layoutX="10.0" layoutY="184.0" onMouseClicked="#treeTableViewPersonnels_Click" prefHeight="291.0" prefWidth="770.0" />
                                         <JFXButton fx:id="buttonResponsibilityAdd" layoutX="550.0" layoutY="25.0" onAction="#buttonResponsibilityAdd_Click" prefHeight="30.0" prefWidth="100.0" styleClass="button-pro" text="Assign Add">
                                             <opaqueInsets>
                                                 <Insets />
                                             </opaqueInsets>
                                         </JFXButton>
+                              <JFXButton fx:id="buttonAllPersonnelReports" layoutX="584.0" layoutY="483.0" onAction="#buttonAllPersonnelReports_Click" prefHeight="30.0" prefWidth="195.0" styleClass="button-pro" text="All Personnels Report" />
+                              <JFXTextField fx:id="textFieldPersonnelSearch" focusColor="#b22828" labelFloat="true" layoutX="581.0" layoutY="153.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -69,6 +70,7 @@
                                                 <Insets />
                                             </opaqueInsets>
                                         </JFXButton>
+                              <JFXTextField fx:id="textFieldStockSearch" focusColor="#b22828" labelFloat="true" layoutX="591.0" layoutY="49.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -88,6 +90,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </JFXButton>
+                              <JFXTextField fx:id="textFieldWasteStorageSearch" focusColor="#b22828" labelFloat="true" layoutX="591.0" layoutY="50.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -112,6 +115,7 @@
                                                 <Insets />
                                             </opaqueInsets>
                                         </JFXButton>
+                              <JFXTextField fx:id="textFieldAssignsSearch" focusColor="#b22828" labelFloat="true" layoutX="591.0" layoutY="49.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -126,7 +130,7 @@
                                         <JFXTextField fx:id="textFieldProductIDResponsibilityAssign" editable="false" focusColor="#b22828" labelFloat="true" layoutX="10.0" layoutY="80.0" prefHeight="30.0" prefWidth="150.0" promptText="Product ID" />
                                         <JFXTextField fx:id="textFieldBrandResponsibilityAssign" editable="false" focusColor="#b22828" labelFloat="true" layoutX="190.0" layoutY="80.0" prefHeight="30.0" prefWidth="150.0" promptText="Brand" />
                                         <JFXTextField fx:id="textFieldDefinitionResponsibilityAssign" editable="false" focusColor="#b22828" labelFloat="true" layoutX="370.0" layoutY="80.0" prefHeight="30.0" prefWidth="150.0" promptText="Definition" />
-                                        <JFXTreeTableView fx:id="treeTableViewResposibilityAssign" layoutX="10.0" layoutY="150.0" onMouseClicked="#treeTableViewResposibilityAssign_Click" prefHeight="360.0" prefWidth="780.0" />
+                                        <JFXTreeTableView fx:id="treeTableViewResposibilityAssign" layoutX="10.0" layoutY="163.0" onMouseClicked="#treeTableViewResposibilityAssign_Click" prefHeight="347.0" prefWidth="780.0" />
                                         <JFXButton fx:id="buttonProductResponsibilityAssign" layoutX="550.0" layoutY="25.0" onAction="#buttonProductResponsibilityAssign_Click" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="Products">
                                             <opaqueInsets>
                                                 <Insets />
@@ -137,6 +141,7 @@
                                                 <Insets />
                                             </opaqueInsets>
                                         </JFXButton>
+                              <JFXTextField fx:id="textFieldAssignAddSearch" focusColor="#b22828" labelFloat="true" layoutX="592.0" layoutY="133.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -148,12 +153,13 @@
                                         <JFXTextField fx:id="textFieldRemoveAssignPersonnelID" editable="false" focusColor="#b22828" labelFloat="true" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Personnel ID" />
                                         <JFXTextField fx:id="textFieldRemoveAssignName" editable="false" focusColor="#b22828" labelFloat="true" layoutX="190.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Name" />
                                         <JFXTextField fx:id="textFieldRemoveAssignLastName" editable="false" focusColor="#b22828" labelFloat="true" layoutX="370.0" layoutY="25.0" prefHeight="30.0" prefWidth="150.0" promptText="Last Name" />
-                                        <JFXTreeTableView fx:id="treeTableViewRemoveAssign" layoutX="10.0" layoutY="75.0" prefHeight="435.0" prefWidth="780.0" />
+                                        <JFXTreeTableView fx:id="treeTableViewRemoveAssign" layoutX="10.0" layoutY="107.0" prefHeight="403.0" prefWidth="780.0" />
                                         <JFXButton fx:id="buttonRemoveAssignRemoveAssign" layoutX="550.0" layoutY="25.0" onAction="#buttonRemoveAssignRemoveAssign_Click" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="Remove Assign">
                                             <opaqueInsets>
                                                 <Insets />
                                             </opaqueInsets>
                                         </JFXButton>
+                              <JFXTextField fx:id="textFieldRemoveAssignSearch" focusColor="#b22828" labelFloat="true" layoutX="592.0" layoutY="76.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -178,8 +184,18 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <JFXTreeTableView fx:id="treeTableViewBuy" layoutX="10.0" layoutY="80.0" prefHeight="430.0" prefWidth="780.0" />
-                              <JFXButton fx:id="buttonBuyProduct" layoutX="10.0" layoutY="25.0" onAction="#buttonBuyProduct" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="Buy Product">
+                              <JFXTreeTableView fx:id="treeTableViewBuy" layoutX="10.0" layoutY="166.0" prefHeight="344.0" prefWidth="780.0" />
+                              <JFXButton fx:id="buttonBuyProduct" layoutX="530.0" layoutY="100.0" onAction="#buttonBuyProduct" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="Buy Product">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </JFXButton>
+                              <JFXTextField fx:id="textFieldBuyProductSearch" focusColor="#b22828" labelFloat="true" layoutX="592.0" layoutY="136.0" prefHeight="30.0" prefWidth="198.0" promptText="Search" />
+                              <JFXTextField fx:id="textFieldBuyBrand" focusColor="#b22828" labelFloat="true" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="190.0" promptText="Brand" />
+                              <JFXTextField fx:id="textFieldBuyDefinition" focusColor="#b22828" labelFloat="true" layoutX="270.0" layoutY="25.0" prefHeight="30.0" prefWidth="190.0" promptText="Definition" />
+                              <JFXTextField fx:id="textFieldBuyPrice" focusColor="#b22828" labelFloat="true" layoutX="10.0" layoutY="100.0" prefHeight="30.0" prefWidth="190.0" promptText="Price" />
+                              <JFXComboBox fx:id="comboBoxCompanyBuy" focusColor="#b22828" layoutX="270.0" layoutY="100.0" prefHeight="30.0" prefWidth="190.0" promptText="Company" />
+                              <JFXButton fx:id="buttonBuyProductAdd" layoutX="530.0" layoutY="25.0" onAction="#buttonBuyProductAdd_Click" prefHeight="30.0" prefWidth="150.0" styleClass="button-pro" text="Product Add">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
